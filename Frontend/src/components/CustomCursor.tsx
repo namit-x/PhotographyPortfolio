@@ -1,103 +1,146 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [trail, setTrail] = useState<Array<{ x: number; y: number; id: number }>>([]);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isHovering, setIsHovering] = useState(false)
+  const [isClicking, setIsClicking] = useState(false)
+  const [isPointer, setIsPointer] = useState(false)
 
   useEffect(() => {
+    document.body.style.cursor = 'none'
+
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-      
-      // Add to trail
-      setTrail(prev => [
-        ...prev.slice(-6), // Keep only last 6 positions
-        { x: e.clientX, y: e.clientY, id: Date.now() }
-      ]);
-    };
+      setMousePosition({ x: e.clientX, y: e.clientY })
 
-    const handleMouseEnter = () => setIsHovering(true);
-    const handleMouseLeave = () => setIsHovering(false);
+      const target = e.target as HTMLElement
+      const computedStyle = window.getComputedStyle(target)
+      const isPointerElement =
+        computedStyle.cursor === 'pointer' ||
+        target.tagName === 'A' ||
+        target.tagName === 'BUTTON' ||
+        target.hasAttribute('onclick') ||
+        target.getAttribute('role') === 'button'
 
-    // Add hover listeners to interactive elements
-    const interactiveElements = document.querySelectorAll('button, a, [role="button"]');
-    
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
-    });
+      setIsPointer(isPointerElement)
+    }
 
-    window.addEventListener('mousemove', updateMousePosition);
+    const handleMouseEnter = (e: Event) => {
+      setIsHovering(true)
+      const target = e.target as HTMLElement
+      if (window.getComputedStyle(target).cursor === 'pointer') {
+        setIsPointer(true)
+      }
+    }
+
+    const handleMouseLeave = () => {
+      setIsHovering(false)
+      setIsPointer(false)
+    }
+
+    const handleMouseDown = () => setIsClicking(true)
+    const handleMouseUp = () => setIsClicking(false)
+
+    const interactiveElements = document.querySelectorAll(
+      'button, a, [role="button"], .cursor-hover, input, textarea, select, [onclick]'
+    )
+
+    interactiveElements.forEach((el) => {
+      el.addEventListener("mouseenter", handleMouseEnter)
+      el.addEventListener("mouseleave", handleMouseLeave)
+    })
+
+    window.addEventListener("mousemove", updateMousePosition)
+    window.addEventListener("mousedown", handleMouseDown)
+    window.addEventListener("mouseup", handleMouseUp)
 
     return () => {
-      window.removeEventListener('mousemove', updateMousePosition);
-      interactiveElements.forEach(el => {
-        el.removeEventListener('mouseenter', handleMouseEnter);
-        el.removeEventListener('mouseleave', handleMouseLeave);
-      });
-    };
-  }, []);
+      document.body.style.cursor = ''
+      window.removeEventListener("mousemove", updateMousePosition)
+      window.removeEventListener("mousedown", handleMouseDown)
+      window.removeEventListener("mouseup", handleMouseUp)
+      interactiveElements.forEach((el) => {
+        el.removeEventListener("mouseenter", handleMouseEnter)
+        el.removeEventListener("mouseleave", handleMouseLeave)
+      })
+    }
+  }, [])
+
+  // Calculate rotation angle based on position to point toward top-left
+  const getRotationAngle = () => {
+    if (isPointer) return 0
+    
+    const centerX = window.innerWidth / 2
+    const centerY = window.innerHeight / 2
+    const deltaX = mousePosition.x - centerX
+    const deltaY = mousePosition.y - centerY
+    
+    // Base angle (-30°) plus dynamic adjustment
+    return 10 + (deltaX * 0.02) - (deltaY * 0.02)
+  }
 
   return (
     <>
-      {/* Trail particles */}
-      {trail.map((point, index) => (
-        <motion.div
-          key={point.id}
-          className="fixed pointer-events-none z-50 w-1 h-1 bg-pink-400 rounded-full"
-          style={{
-            left: point.x - 2,
-            top: point.y - 2,
-          }}
-          initial={{ opacity: 0.8, scale: 1 }}
-          animate={{ 
-            opacity: 0, 
-            scale: 0,
-          }}
-          transition={{ 
-            duration: 0.8,
-            delay: index * 0.05,
-            ease: "easeOut"
-          }}
-        />
-      ))}
-
-      {/* Main cursor */}
       <motion.div
-        className="fixed pointer-events-none z-50 mix-blend-difference"
+        className="fixed pointer-events-none z-50"
         style={{
-          left: mousePosition.x - 12,
-          top: mousePosition.y - 12,
+          left: mousePosition.x,
+          top: mousePosition.y,
+          transform: 'translate(-50%, -50%)',
+          transformOrigin: 'center'
         }}
         animate={{
-          scale: isHovering ? 2 : 1,
+          scale: isClicking ? 0.9 : (isHovering || isPointer) ? 1.5 : 1,
+          rotate: getRotationAngle(),
         }}
         transition={{
           type: "spring",
-          stiffness: 500,
-          damping: 28,
+          stiffness: 400,
+          damping: 25,
+          mass: 0.5,
         }}
       >
-        <div className="w-6 h-6 border-2 border-white rounded-full" />
+        {isPointer ? (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M10 4C7.2 4 5 6.2 5 9V14C5 16.8 7.2 19 10 19H15C17.8 19 20 16.8 20 14V9C20 6.2 17.8 4 15 4H10Z"
+              fill="white"
+              stroke="black"
+              strokeWidth="0.5"
+            />
+          </svg>
+        ) : (
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M2 2L18 10L8 12L6 18L2 2Z"
+              fill="white"
+              stroke="black"
+              strokeWidth="0.5"
+            />
+          </svg>
+        )}
       </motion.div>
 
-      {/* Secondary cursor dot */}
       <motion.div
-        className="fixed pointer-events-none z-50 w-2 h-2 bg-white rounded-full mix-blend-difference"
+        className="fixed pointer-events-none z-40"
         style={{
-          left: mousePosition.x - 4,
-          top: mousePosition.y - 4,
+          left: mousePosition.x,
+          top: mousePosition.y,
+          transform: 'translate(-50%, -50%)'
         }}
         animate={{
-          scale: isHovering ? 0 : 1,
+          scale: (isHovering || isPointer) ? 1.8 : 0,
+          opacity: (isHovering || isPointer) ? 0.3 : 0,
+          backgroundColor: isPointer ? '#3b82f6' : '#ec4899'
         }}
         transition={{
           type: "spring",
-          stiffness: 600,
-          damping: 30,
+          stiffness: 300,
+          damping: 20,
         }}
-      />
+      >
+        <div className="w-5 h-5 rounded-full blur-sm" />
+      </motion.div>
     </>
-  );
+  )
 }
