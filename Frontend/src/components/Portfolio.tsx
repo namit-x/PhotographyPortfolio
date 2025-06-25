@@ -1,6 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import gsap from 'gsap';
 
 const portfolioImages = [
   {
@@ -57,7 +56,7 @@ const portfolioImages = [
 
 export default function Portfolio() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  // const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
     <section

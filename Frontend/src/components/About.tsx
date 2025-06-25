@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Award, Camera, Heart, Users } from 'lucide-react';
 import gsap from 'gsap';

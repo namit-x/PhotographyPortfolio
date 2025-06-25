@@ -1,230 +1,302 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
-import { Camera, ChevronDown } from 'lucide-react';
-import * as THREE from 'three';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
-function RotatingCamera() {
-  const meshRef = useRef<THREE.Mesh>(null!);
-  
-  useFrame((state, delta) => {
-    meshRef.current.rotation.y += delta * 0.3;
-    meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-    meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-  });
-
-  return (
-    <group>
-      <mesh ref={meshRef}>
-        <boxGeometry args={[1, 0.6, 0.8]} />
-        <meshStandardMaterial color="#1f2937" roughness={0.3} metalness={0.7} />
-        <mesh position={[0.3, 0.2, 0.4]}>
-          <cylinderGeometry args={[0.2, 0.2, 0.3]} />
-          <meshStandardMaterial color="#374151" roughness={0.2} metalness={0.8} />
-        </mesh>
-      </mesh>
-      <pointLight position={[2, 2, 2]} intensity={0.5} color="#ec4899" />
-    </group>
-  );
+interface MediaItem {
+  type: 'image' | 'video';
+  src: string;
+  alt?: string;
+  title?: string;
+  description?: string;
 }
 
+const mediaItems: MediaItem[] = [
+  {
+    type: 'image',
+    src: 'https://static.vecteezy.com/system/resources/previews/050/494/463/non_2x/indian-weddinggraphy-in-bangalore-free-photo.jpg',
+    alt: 'Indian bride in red silk saree with gold jewelry',
+    title: 'Traditional Indian Bride',
+    description: 'A bride adorned in a stunning red saree and intricate gold jewelry—pure timeless elegance'
+  },
+  {
+    type: 'image',
+    src: 'https://images.prismic.io/memoriesdesigner/af264e19-796a-4ff5-bc68-b54c3996a18e_4.png',
+    alt: 'Groom during Haldi ceremony, turmeric paste on his face',
+    title: 'Haldi Prelude',
+    description: 'Joyful pre-wedding Haldi ceremony—vibrant turmeric rituals for laughter and blessings'
+  },
+  {
+    "type": "image",
+    "src": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80",
+    "alt": "Conference event with stage lighting",
+    "title": "Professional Excellence",
+    "description": "Corporate gala with perfect lighting"
+  },
+  {
+    "type": "image",
+    "src": "https://images.pexels.com/photos/274131/pexels-photo-274131.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop&fm=webp",
+    "alt": "Luxury event venue with crystal chandeliers",
+    "title": "Grand Soirée",
+    "description": "Elegant reception under sparkling chandeliers"
+  }
+];
+
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [timerReset, setTimerReset] = useState(0);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const currentMedia = mediaItems[currentIndex];
 
-  const springConfig = { damping: 30, stiffness: 400 };
-  const springX = useSpring(mouseX, springConfig);
-  const springY = useSpring(mouseY, springConfig);
+  useEffect(() => {
+    if (!isPlaying) return;
 
-  const rotateX = useTransform(springY, [-0.5, 0.5], [8, -8]);
-  const rotateY = useTransform(springX, [-0.5, 0.5], [-8, 8]);
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % mediaItems.length);
+    }, 5000);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
-    const y = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-    
-    mouseX.set(x);
-    mouseY.set(y);
-    setMousePosition({ x: e.clientX, y: e.clientY });
+    return () => clearInterval(interval);
+  }, [isPlaying, timerReset]);
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % mediaItems.length);
+    setTimerReset((prev) => prev + 1);
+  };
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
+    setTimerReset((prev) => prev + 1);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  };
+
+  const handleVideoPlay = () => {
+    setIsPlaying(false);
   };
 
   return (
-    <div 
-      ref={containerRef}
-      className="relative h-screen overflow-hidden bg-gradient-to-br from-white via-pink-50 to-rose-100"
-      onMouseMove={handleMouseMove}
-    >
-      {/* Animated background elements */}
+    <div className="relative h-screen w-full overflow-hidden bg-black">
+      {/* Media Container */}
       <div className="absolute inset-0">
-        <motion.div
-          className="absolute top-20 left-20 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-20 w-80 h-80 bg-rose-500/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.4, 0.2, 0.4],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/3 w-48 h-48 bg-pink-300/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.4, 1],
-            opacity: [0.2, 0.5, 0.2],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
+            className="absolute inset-0"
+          >
+            {currentMedia.type === 'image' ? (
+              <img
+                src={currentMedia.src}
+                alt={currentMedia.alt}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <video
+                src={currentMedia.src}
+                className="w-full h-full object-cover"
+                autoPlay
+                loop
+                muted={isMuted}
+                playsInline
+                onPlay={handleVideoPlay}
+              />
+            )}
+            {/* Simple Transparent Blur Layer */}
+            <div className="absolute inset-0 bg-white/10 backdrop-blur-xs" />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Hero content */}
-      <div className="relative z-10 flex items-center justify-center h-full px-4">
-        <motion.div
-          className="text-center max-w-5xl mx-auto"
-          style={{
-            rotateX,
-            rotateY,
-            transformStyle: "preserve-3d",
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 0.3, ease: [0.76, 0, 0.24, 1] }}
-            className="mb-8"
-          >
-            <h1 className="text-7xl md:text-9xl font-bold mb-6 tracking-tight leading-none">
-              <motion.span
-                className="inline-block text-pink-600"
-                initial={{ opacity: 0, y: 100, rotateX: -90 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                transition={{ duration: 1, delay: 0.5, ease: [0.76, 0, 0.24, 1] }}
-              >
-                Meenakshi
-              </motion.span>
-              <br />
-              <motion.span
-                className="inline-block text-black"
-                initial={{ opacity: 0, y: 100, rotateX: -90 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                transition={{ duration: 1, delay: 0.7, ease: [0.76, 0, 0.24, 1] }}
-              >
-                Studio
-              </motion.span>
-            </h1>
-          </motion.div>
+      {/* Overlay Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
 
+      {/* Content Overlay */}
+      {/* <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="max-w-4xl px-8 py-12 backdrop-blur-md bg-black/30 rounded-3xl border border-white/10 shadow-2xl"
+        >
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-rose-600 bg-clip-text text-transparent">
+            Meenakshi Studio
+          </h1>
           <motion.p
-            className="text-xl md:text-3xl text-gray-700 mb-12 leading-relaxed max-w-3xl mx-auto font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.9 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="text-xl md:text-2xl mb-8 text-pink-100/90 font-light"
           >
-            Where moments transform into timeless art.
-            <br />
-            <span className="text-pink-600 font-medium">Capturing the extraordinary in every frame.</span>
+            Where moments become timeless memories
           </motion.p>
 
-          <motion.div
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="mb-8 bg-white/5 p-6 rounded-xl"
+            >
+              <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-white">
+                {currentMedia.title}
+              </h2>
+              <p className="text-lg text-pink-50/80 max-w-2xl mx-auto">
+                {currentMedia.description}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-pink-600 to-rose-700 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-rose-500/40 transition-all duration-300 border border-white/20"
+          >
+            Explore Our Work
+          </motion.button>
+        </motion.div>
+      </div> */}
+
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="max-w-4xl px-4"
+        >
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 text-white">
+            Meenakshi Studio
+          </h1>
+          <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="text-xl md:text-2xl mb-8 text-pink-100 font-light"
           >
-            <motion.button
-              className="group px-10 py-5 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-full text-lg font-semibold hover:from-pink-500 hover:to-rose-500 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-500/25 backdrop-blur-sm"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="flex items-center gap-3">
-                <Camera className="w-6 h-6" />
-                View Portfolio
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  →
-                </motion.span>
-              </span>
-            </motion.button>
-            
-            <motion.button
-              className="group px-10 py-5 border-2 border-gray-800 text-gray-800 rounded-full text-lg font-semibold hover:bg-gray-800 hover:text-white transition-all duration-300 backdrop-blur-sm"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Book Session
-            </motion.button>
-          </motion.div>
-        </motion.div>
+            Where moments become timeless memories
+          </motion.p>
 
-        {/* 3D Camera Element */}
-        <motion.div
-          className="absolute top-1/2 right-10 w-40 h-40 hidden lg:block"
-          initial={{ opacity: 0, scale: 0, rotateY: -180 }}
-          animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-          transition={{ duration: 1.5, delay: 1.3, ease: [0.76, 0, 0.24, 1] }}
-          style={{
-            rotateX: useTransform(springY, [-0.5, 0.5], [5, -5]),
-            rotateY: useTransform(springX, [-0.5, 0.5], [-5, 5]),
-          }}
-        >
-          <Canvas>
-            <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-            <ambientLight intensity={0.3} />
-            <pointLight position={[10, 10, 10]} intensity={0.5} />
-            <RotatingCamera />
-            <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.5} />
-          </Canvas>
+          <div className="h-px w-32 bg-pink-400 mx-auto mb-8"></div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="mb-8"
+            >
+              <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-white">
+                {currentMedia.title}
+              </h2>
+              <p className="text-lg text-pink-50 max-w-2xl mx-auto">
+                {currentMedia.description}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/10 transition-all duration-300 border-2 border-white"
+          >
+            Explore Our Work
+          </motion.button>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1.5 }}
-      >
-        <motion.div
-          animate={{ y: [0, 12, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center text-gray-600"
+      {/* Navigation Controls */}
+      <div className="absolute inset-y-0 left-4 flex items-center z-20">
+        <button
+          onClick={goToPrevious}
+          className="p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 group"
         >
-          <span className="text-sm mb-3 font-medium tracking-wide">Scroll to explore</span>
-          <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
-            <motion.div
-              className="w-1 h-3 bg-pink-500 rounded-full mt-2"
-              animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </div>
-        </motion.div>
-      </motion.div>
+          <ChevronLeft className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+        </button>
+      </div>
+
+      <div className="absolute inset-y-0 right-4 flex items-center z-20">
+        <button
+          onClick={goToNext}
+          className="p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 group"
+        >
+          <ChevronRight className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
+        </button>
+      </div>
+
+      {/* Media Controls */}
+      <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20">
+        <button
+          onClick={togglePlayPause}
+          className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
+        >
+          {isPlaying ? (
+            <Pause className="w-5 h-5 text-white" />
+          ) : (
+            <Play className="w-5 h-5 text-white" />
+          )}
+        </button>
+
+        {currentMedia.type === 'video' && (
+          <button
+            onClick={toggleMute}
+            className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
+          >
+            {isMuted ? (
+              <VolumeX className="w-5 h-5 text-white" />
+            ) : (
+              <Volume2 className="w-5 h-5 text-white" />
+            )}
+          </button>
+        )}
+      </div>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
+        {mediaItems.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
+              ? 'bg-white scale-125'
+              : 'bg-white/50 hover:bg-white/70'
+              }`}
+          />
+        ))}
+      </div>
+
+      {/* Progress Bar */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20 z-20">
+        <motion.div
+          className="h-full bg-gradient-to-r from-pink-500 to-rose-500"
+          initial={{ width: 0 }}
+          animate={{ width: isPlaying ? '100%' : '0%' }}
+          transition={{ duration: 5, ease: "linear" }}
+          key={`${currentIndex}-${isPlaying}`}
+        />
+      </div>
     </div>
   );
 }
