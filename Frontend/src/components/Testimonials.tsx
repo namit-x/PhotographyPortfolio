@@ -122,10 +122,10 @@ export default function Testimonials() {
   const currentTestimonial = testimonials[currentIndex]
 
   return (
-    <div className="relative py-16 bg-black overflow-hidden" style={{ minHeight: "80vh" }}>
-      {/* Background gradient effects matching your theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-900/20 via-black to-purple-900/20" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(236,72,153,0.1),transparent_50%)]" />
+    <div className="relative py-16 bg-gradient-to-br from-gray-50 via-white to-pink-50 overflow-hidden" style={{ minHeight: "80vh" }}>
+      {/* Background gradient effects with lighter theme */}
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-100/30 via-white to-purple-100/30" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(236,72,153,0.08),transparent_50%)]" />
 
       <div ref={sectionRef} className="relative z-10 max-w-7xl mx-auto px-4">
         {/* Simple Header */}
@@ -136,7 +136,7 @@ export default function Testimonials() {
           transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <motion.h2
-            className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-white via-pink-200 to-white bg-clip-text text-transparent mb-4"
+            className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-gray-800 via-pink-600 to-gray-800 bg-clip-text text-transparent mb-4"
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1, delay: 0.2 }}
@@ -145,7 +145,7 @@ export default function Testimonials() {
           </motion.h2>
 
           <motion.p
-            className="text-gray-300 text-lg max-w-2xl mx-auto"
+            className="text-gray-600 text-lg max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -172,9 +172,9 @@ export default function Testimonials() {
                 }}
                 className="absolute inset-0"
               >
-                <div className="bg-gradient-to-br from-gray-900/80 via-gray-800/60 to-gray-900/80 backdrop-blur-xl border border-pink-500/20 rounded-3xl p-8 md:p-12 h-full flex flex-col justify-center relative overflow-hidden shadow-2xl shadow-pink-500/10">
+                <div className="bg-white/80 backdrop-blur-xl border border-pink-200/50 rounded-3xl p-8 md:p-12 h-full flex flex-col justify-center relative overflow-hidden shadow-2xl shadow-pink-200/20">
                   {/* Subtle glow effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 via-transparent to-purple-500/5 rounded-3xl" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-pink-50/80 via-transparent to-purple-50/80 rounded-3xl" />
 
                   <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full">
                     {/* Client Info */}
@@ -184,16 +184,16 @@ export default function Testimonials() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.6, delay: 0.2 }}
                     >
-                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">{currentTestimonial.name}</h3>
-                      <p className="text-pink-300 text-sm uppercase tracking-wider mb-6">{currentTestimonial.role}</p>
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{currentTestimonial.name}</h3>
+                      <p className="text-pink-600 text-sm uppercase tracking-wider mb-6">{currentTestimonial.role}</p>
 
-                      <div className="space-y-3 text-gray-300 text-sm">
+                      <div className="space-y-3 text-gray-600 text-sm">
                         <div className="flex items-center justify-center lg:justify-start gap-2">
-                          <Camera className="w-4 h-4 text-pink-400" />
+                          <Camera className="w-4 h-4 text-pink-500" />
                           <span>{currentTestimonial.event}</span>
                         </div>
                         <div className="flex items-center justify-center lg:justify-start gap-2">
-                          <Sparkles className="w-4 h-4 text-pink-400" />
+                          <Sparkles className="w-4 h-4 text-pink-500" />
                           <span>{currentTestimonial.location}</span>
                         </div>
                       </div>
@@ -206,9 +206,9 @@ export default function Testimonials() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.6, delay: 0.4 }}
                     >
-                      <Quote className="w-12 h-12 text-pink-400/40 mb-4" />
+                      <Quote className="w-12 h-12 text-pink-300 mb-4" />
 
-                      <blockquote className="text-xl md:text-2xl text-gray-100 leading-relaxed italic mb-6">
+                      <blockquote className="text-xl md:text-2xl text-gray-700 leading-relaxed italic mb-6">
                         "{currentTestimonial.text}"
                       </blockquote>
 
@@ -229,22 +229,22 @@ export default function Testimonials() {
           <div className="absolute inset-y-0 -left-16 flex items-center">
             <motion.button
               onClick={goToPrevious}
-              className="p-4 rounded-full bg-gray-900/60 backdrop-blur-sm border border-pink-500/20 hover:bg-gray-800/80 hover:border-pink-400/40 transition-all duration-300 group"
+              className="p-4 rounded-full bg-white/80 backdrop-blur-sm border border-pink-200/50 hover:bg-pink-50/80 hover:border-pink-300/60 transition-all duration-300 group shadow-lg"
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.9 }}
             >
-              <ChevronLeft className="w-6 h-6 text-white group-hover:text-pink-300 transition-colors" />
+              <ChevronLeft className="w-6 h-6 text-gray-700 group-hover:text-pink-600 transition-colors" />
             </motion.button>
           </div>
 
           <div className="absolute inset-y-0 -right-16 flex items-center">
             <motion.button
               onClick={goToNext}
-              className="p-4 rounded-full bg-gray-900/60 backdrop-blur-sm border border-pink-500/20 hover:bg-gray-800/80 hover:border-pink-400/40 transition-all duration-300 group"
+              className="p-4 rounded-full bg-white/80 backdrop-blur-sm border border-pink-200/50 hover:bg-pink-50/80 hover:border-pink-300/60 transition-all duration-300 group shadow-lg"
               whileHover={{ scale: 1.1, x: 5 }}
               whileTap={{ scale: 0.9 }}
             >
-              <ChevronRight className="w-6 h-6 text-white group-hover:text-pink-300 transition-colors" />
+              <ChevronRight className="w-6 h-6 text-gray-700 group-hover:text-pink-600 transition-colors" />
             </motion.button>
           </div>
         </div>
@@ -258,7 +258,7 @@ export default function Testimonials() {
               className={`relative overflow-hidden transition-all duration-300 ${
                 index === currentIndex
                   ? "w-12 h-3 bg-gradient-to-r from-pink-500 to-purple-500"
-                  : "w-3 h-3 bg-gray-600 hover:bg-gray-500"
+                  : "w-3 h-3 bg-gray-300 hover:bg-gray-400"
               } rounded-full`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
@@ -280,7 +280,7 @@ export default function Testimonials() {
         <div className="text-center mt-8">
           <motion.button
             onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-            className="text-gray-400 hover:text-pink-300 transition-colors text-sm"
+            className="text-gray-500 hover:text-pink-600 transition-colors text-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
