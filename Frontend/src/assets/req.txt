@@ -1,0 +1,12 @@
+full name
+phone
+email
+address
+
+instagram
+facebook
+twitter
+
+experience
+projects
+weddings

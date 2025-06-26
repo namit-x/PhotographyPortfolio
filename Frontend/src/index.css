@@ -3,9 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, * {
+/* html, body, * {
   cursor: none !important;
-}
+} */
 
 * {
   margin: 0;
@@ -17,7 +17,6 @@ body {
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
   color: #1f2937;
-  cursor: none;
   overflow-x: hidden;
   background-color: #ffffff;
 }

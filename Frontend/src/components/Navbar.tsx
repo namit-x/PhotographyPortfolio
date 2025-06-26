@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useRef, useEffect, useState } from "react"
 
@@ -109,8 +107,6 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
 
   const handleClick = (e: React.MouseEvent<HTMLLIElement>, index: number) => {
     const liEl = e.currentTarget
-    if (activeIndex === index) return
-
     setActiveIndex(index)
     updateEffectPosition(liEl)
 
@@ -159,6 +155,20 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     resizeObserver.observe(containerRef.current)
     return () => resizeObserver.disconnect()
   }, [activeIndex])
+
+  // Add this effect to trigger gooey animation on initial render
+  useEffect(() => {
+    if (!navRef.current || !filterRef.current) return;
+    const activeLi = navRef.current.querySelectorAll("li")[activeIndex] as HTMLElement;
+    if (activeLi) {
+      updateEffectPosition(activeLi);
+      // Clean up any existing particles
+      const particles = filterRef.current.querySelectorAll(".particle");
+      particles.forEach((p) => filterRef.current!.removeChild(p));
+      makeParticles(filterRef.current);
+      textRef.current?.classList.add("active");
+    }
+  }, []);
 
   return (
     <>

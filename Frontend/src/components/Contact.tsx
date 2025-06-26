@@ -338,13 +338,13 @@ export default function Contact() {
               {
                 icon: Phone,
                 title: "Call Us",
-                content: "+91 92551 52985\n+91 92554 70708\nWhatsApp Available",
+                content: "+91 90052 34215\n+91 92921 23738\nWhatsApp Available",
                 color: "from-purple-500 to-pink-500",
               },
               {
                 icon: Mail,
                 title: "Email Us",
-                content: "minakshistudiortk@gmail.com",
+                content: "Namitstudiortk@gmail.com",
                 color: "from-rose-500 to-orange-500",
               },
               {
@@ -601,7 +601,7 @@ export default function Contact() {
                   transition={{ duration: 0.3 }}
                 >
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.1718195147064!2d76.59653537529923!3d28.89324187552335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d851e8b1c31fd%3A0xe8d0ef615ff6059b!2sMinakshi%20Studio!5e0!3m2!1sen!2sin!4v1750913937686!5m2!1sen!2sin"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.123456789!2d76.6054321!3d28.8956789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d85000000000%3A0x123456789abcde!2sMeenakshi%20Studio%2C%20Rohtak!5e0!3m2!1sen!2sin!4v1234567890!5m2!1sen!2sin"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -659,19 +659,19 @@ export default function Contact() {
                       {
                         icon: Instagram,
                         name: "Instagram",
-                        handle: "@meenakshistudio",
+                        handle: "@namitstudio",
                         color: "from-pink-500 to-purple-500",
                       },
                       {
                         icon: Facebook,
                         name: "Facebook",
-                        handle: "MeenakshiStudio",
+                        handle: "namitStudio",
                         color: "from-blue-500 to-purple-500",
                       },
                       {
                         icon: Twitter,
                         name: "Twitter",
-                        handle: "@meenakshistudio",
+                        handle: "@namitstudio",
                         color: "from-blue-400 to-blue-600",
                       },
                     ].map((social, index) => (

@@ -108,13 +108,13 @@ export default function CustomCursor() {
   return (
     <>
       <motion.div
-        className="fixed pointer-events-none z-50"
+        className="fixed pointer-events-none z-[99999]"
         style={{
           left: mousePosition.x,
           top: mousePosition.y,
           transform: "translate(-50%, -50%)",
           transformOrigin: "center",
-          outline: "none",
+          outline: "none"
         }}
         animate={{
           scale: isClicking ? 1.2 : isHovering || isPointer ? 2.2 : 1.5,
@@ -150,13 +150,13 @@ export default function CustomCursor() {
       </motion.div>
 
       <motion.div
-        className="fixed pointer-events-none z-40"
+        className="fixed pointer-events-none z-[99998]"
         style={{
           left: mousePosition.x,
           top: mousePosition.y,
           transform: "translate(-50%, -50%)",
           outline: "none",
-          boxShadow: "none",
+          boxShadow: "none"
         }}
         animate={{
           scale: isHovering || isPointer ? 1.8 : 0,

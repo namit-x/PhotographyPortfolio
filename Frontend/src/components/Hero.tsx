@@ -86,217 +86,227 @@ export default function Hero() {
   };
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Media Container */}
-      <div className="absolute inset-0">
-        <AnimatePresence mode="wait">
+    <>
+      {/* Enhanced Typography Styles */}
+      <style>{`
+        .hero-title {
+          background: linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #fdf2f8 20%,
+            #fce7f3 40%,
+            #f3e8ff 60%,
+            #e0e7ff 80%,
+            #ffffff 100%
+          );
+          background-size: 300% 300%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: heroGradient 6s ease-in-out infinite;
+          text-shadow: 0 0 40px rgba(236, 72, 153, 0.3);
+        }
+        
+        @keyframes heroGradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        
+        .hero-subtitle {
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card {
+          background: rgba(0, 0, 0, 0.2);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+      `}</style>
+
+      <div className="relative h-screen w-full overflow-hidden bg-black">
+        {/* Media Container */}
+        <div className="absolute inset-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
+              className="absolute inset-0"
+            >
+              {currentMedia.type === 'image' ? (
+                <img
+                  src={currentMedia.src || "/placeholder.svg"}
+                  alt={currentMedia.alt}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <video
+                  src={currentMedia.src}
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  loop
+                  muted={isMuted}
+                  playsInline
+                  onPlay={handleVideoPlay}
+                />
+              )}
+              {/* Enhanced Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/70" />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-10">
           <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
-            className="absolute inset-0"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="max-w-5xl px-8 py-16 glass-card rounded-3xl"
           >
-            {currentMedia.type === 'image' ? (
-              <img
-                src={currentMedia.src}
-                alt={currentMedia.alt}
-                className="w-full h-full object-cover"
+            <h1 className="font-playfair text-7xl md:text-9xl lg:text-[10rem] font-bold mb-8 hero-title tracking-tight leading-none">
+              Namit Studio
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="font-cormorant text-2xl md:text-3xl lg:text-4xl mb-12 text-pink-100/90 font-light italic hero-subtitle leading-relaxed"
+            >
+              "Reflection of your loving moments"
+            </motion.p>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="mb-10 bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10"
+              >
+                <h2 className="font-space text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 text-white tracking-wide">
+                  {currentMedia.title}
+                </h2>
+                <p className="font-inter text-lg md:text-xl text-pink-50/80 max-w-3xl mx-auto leading-relaxed">
+                  {currentMedia.description}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 1.2 }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative font-space bg-gradient-to-r from-pink-600 to-rose-700 text-white px-10 py-5 rounded-full text-lg font-semibold shadow-2xl hover:shadow-rose-500/40 transition-all duration-300 border border-white/20 overflow-hidden"
+            >
+              <span className="relative z-10 tracking-wide uppercase">Explore Our Work</span>
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               />
-            ) : (
-              <video
-                src={currentMedia.src}
-                className="w-full h-full object-cover"
-                autoPlay
-                loop
-                muted={isMuted}
-                playsInline
-                onPlay={handleVideoPlay}
-              />
-            )}
-            {/* Simple Transparent Blur Layer */}
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-xs" />
+            </motion.button>
           </motion.div>
-        </AnimatePresence>
-      </div>
+        </div>
 
-      {/* Overlay Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-
-      {/* Content Overlay */}
-      {/* <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="max-w-4xl px-8 py-12 backdrop-blur-md bg-black/30 rounded-3xl border border-white/10 shadow-2xl"
-        >
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-rose-600 bg-clip-text text-transparent">
-            Meenakshi Studio
-          </h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="text-xl md:text-2xl mb-8 text-pink-100/90 font-light"
-          >
-            Reflection of your loving moments
-          </motion.p>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8 bg-white/5 p-6 rounded-xl"
-            >
-              <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-white">
-                {currentMedia.title}
-              </h2>
-              <p className="text-lg text-pink-50/80 max-w-2xl mx-auto">
-                {currentMedia.description}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-
+        {/* Enhanced Navigation Controls */}
+        <div className="absolute inset-y-0 left-4 flex items-center z-20">
           <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-pink-600 to-rose-700 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-rose-500/40 transition-all duration-300 border border-white/20"
+            onClick={goToPrevious}
+            className="p-4 rounded-full glass-card hover:bg-white/20 transition-all duration-300 group"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            Explore Our Work
+            <ChevronLeft className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
           </motion.button>
-        </motion.div>
-      </div> */}
+        </div>
 
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="max-w-4xl px-4"
-        >
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 text-white">
-            Meenakshi Studio
-          </h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="text-xl md:text-2xl mb-8 text-pink-100 font-light"
-          >
-            Reflection of your loving moments
-          </motion.p>
-
-          <div className="h-px w-32 bg-pink-400 mx-auto mb-8"></div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8"
-            >
-              <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-white">
-                {currentMedia.title}
-              </h2>
-              <p className="text-lg text-pink-50 max-w-2xl mx-auto">
-                {currentMedia.description}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-
+        <div className="absolute inset-y-0 right-4 flex items-center z-20">
           <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-transparent text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/10 transition-all duration-300 border-2 border-white"
+            onClick={goToNext}
+            className="p-4 rounded-full glass-card hover:bg-white/20 transition-all duration-300 group"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            Explore Our Work
+            <ChevronRight className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
           </motion.button>
-        </motion.div>
-      </div>
+        </div>
 
-      {/* Navigation Controls */}
-      <div className="absolute inset-y-0 left-4 flex items-center z-20">
-        <button
-          onClick={goToPrevious}
-          className="p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 group"
-        >
-          <ChevronLeft className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
-        </button>
-      </div>
-
-      <div className="absolute inset-y-0 right-4 flex items-center z-20">
-        <button
-          onClick={goToNext}
-          className="p-3 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300 group"
-        >
-          <ChevronRight className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
-        </button>
-      </div>
-
-      {/* Media Controls */}
-      <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20">
-        <button
-          onClick={togglePlayPause}
-          className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
-        >
-          {isPlaying ? (
-            <Pause className="w-5 h-5 text-white" />
-          ) : (
-            <Play className="w-5 h-5 text-white" />
-          )}
-        </button>
-
-        {currentMedia.type === 'video' && (
-          <button
-            onClick={toggleMute}
-            className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300"
+        {/* Enhanced Media Controls */}
+        <div className="absolute bottom-6 left-6 flex items-center gap-4 z-20">
+          <motion.button
+            onClick={togglePlayPause}
+            className="p-3 rounded-full glass-card hover:bg-white/20 transition-all duration-300"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            {isMuted ? (
-              <VolumeX className="w-5 h-5 text-white" />
+            {isPlaying ? (
+              <Pause className="w-5 h-5 text-white" />
             ) : (
-              <Volume2 className="w-5 h-5 text-white" />
+              <Play className="w-5 h-5 text-white" />
             )}
-          </button>
-        )}
-      </div>
+          </motion.button>
 
-      {/* Slide Indicators */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
-        {mediaItems.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
-              ? 'bg-white scale-125'
-              : 'bg-white/50 hover:bg-white/70'
-              }`}
-          />
-        ))}
-      </div>
+          {currentMedia.type === 'video' && (
+            <motion.button
+              onClick={toggleMute}
+              className="p-3 rounded-full glass-card hover:bg-white/20 transition-all duration-300"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {isMuted ? (
+                <VolumeX className="w-5 h-5 text-white" />
+              ) : (
+                <Volume2 className="w-5 h-5 text-white" />
+              )}
+            </motion.button>
+          )}
+        </div>
 
-      {/* Progress Bar */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20 z-20">
-        <motion.div
-          className="h-full bg-gradient-to-r from-pink-500 to-rose-500"
-          initial={{ width: 0 }}
-          animate={{ width: isPlaying ? '100%' : '0%' }}
-          transition={{ duration: 5, ease: "linear" }}
-          key={`${currentIndex}-${isPlaying}`}
-        />
+        {/* Enhanced Slide Indicators */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
+          {mediaItems.map((_, index) => (
+            <motion.button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
+                ? 'bg-white scale-125 shadow-lg shadow-white/50'
+                : 'bg-white/50 hover:bg-white/70'
+                }`}
+              whileHover={{ scale: index === currentIndex ? 1.25 : 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            />
+          ))}
+        </div>
+
+        {/* Enhanced Progress Bar */}
+        <div className="absolute bottom-0 left-0 w-full h-1 bg-black/30 z-20">
+          <motion.div
+            className="h-full bg-gradient-to-r from-pink-500 via-rose-400 to-pink-500 relative overflow-hidden"
+            initial={{ width: 0 }}
+            animate={{ width: isPlaying ? '100%' : '0%' }}
+            transition={{ duration: 5, ease: "linear" }}
+            key={`${currentIndex}-${isPlaying}`}
+          >
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+              animate={{ x: ["-100%", "100%"] }}
+              transition={{
+                duration: 2,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            />
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

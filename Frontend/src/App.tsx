@@ -4,9 +4,11 @@ import LoadingScreen from "./components/LoadingScreen"
 import Hero from "./components/Hero"
 import CustomCursor from "./components/CustomCursor"
 import PhotoGrid from "./components/PhotoGrid"
+import VideoSection from "./components/VideoSection"
 import Portfolio from "./components/Portfolio"
 import Contact from "./components/Contact"
 import GooeyNav from "./components/Navbar"
+import Studio from "./components/Studio"
 
 type CurrentPage = "home" | "portfolio" | "studio" | "contact"
 
@@ -65,7 +67,7 @@ function App() {
 
   return (
     <div className="relative bg-black min-h-screen">
-      <CustomCursor />
+      {/* <CustomCursor /> */}
 
       <AnimatePresence mode="wait">
         {isLoading ? (
@@ -106,6 +108,7 @@ function App() {
                 >
                   <Hero />
                   <PhotoGrid onNavigateToPortfolio={() => setCurrentPage("portfolio")} />
+                  <VideoSection />
                 </motion.div>
               ) : currentPage === "portfolio" ? (
                 <motion.div
@@ -126,10 +129,7 @@ function App() {
                   transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                   className="min-h-screen flex items-center justify-center"
                 >
-                  <div className="text-center text-white">
-                    <h1 className="text-6xl font-bold mb-4">Studio</h1>
-                    <p className="text-xl text-gray-300">Coming Soon...</p>
-                  </div>
+                  <Studio />
                 </motion.div>
               ) : currentPage === "contact" ? (
                 <motion.div

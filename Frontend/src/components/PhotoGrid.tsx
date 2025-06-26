@@ -8,7 +8,6 @@ interface PhotoItem {
   height: string
   text: string
   animation: string
-  // Removed: category: string;
 }
 
 interface PhotoGridProps {
@@ -207,7 +206,7 @@ const PhotoCard = ({ item, index }: { item: (typeof photoItems)[0]; index: numbe
         zIndex: 50,
         transition: { duration: 0.3 },
       }}
-      className={`w-full ${item.height} mb-6 overflow-hidden rounded-2xl relative group cursor-pointer`}
+      className={`w-full ${item.height} mb-6 overflow-hidden rounded-3xl relative group cursor-pointer border border-pink-200/20`}
       style={{
         filter: "drop-shadow(0 10px 30px rgba(0,0,0,0.1))",
       }}
@@ -243,11 +242,11 @@ const PhotoCard = ({ item, index }: { item: (typeof photoItems)[0]; index: numbe
           transition: { duration: 0.3, delay: 0.1 },
         }}
       >
-        <h3 className="text-white font-bold text-lg mb-1 drop-shadow-lg">{item.text}</h3>
+        <h3 className="font-playfair text-white font-bold text-lg mb-1 drop-shadow-lg">{item.text}</h3>
       </motion.div>
 
       <motion.div
-        className="absolute inset-0 border-2 border-pink-400/50 rounded-2xl"
+        className="absolute inset-0 border-2 border-pink-400/50 rounded-3xl"
         initial={{ opacity: 0 }}
         animate={{
           opacity: isHovered ? 1 : 0,
@@ -256,7 +255,7 @@ const PhotoCard = ({ item, index }: { item: (typeof photoItems)[0]; index: numbe
       />
 
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-pink-200/10 to-rose-200/10 rounded-2xl"
+        className="absolute inset-0 bg-gradient-to-br from-pink-200/10 to-rose-200/10 rounded-3xl"
         initial={{ opacity: 0 }}
         animate={{
           opacity: isHovered ? 1 : 0,
@@ -295,156 +294,167 @@ export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}
   const columns = organizePhotosIntoColumns()
 
   return (
-    <section className="relative py-20 px-4 bg-gradient-to-br from-gray-50 via-white to-pink-50/30 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <FloatingElement key={i} delay={i * 0.8} />
-        ))}
-      </div>
+    <>
+      {/* Enhanced Typography Styles */}
+      <style jsx global>{`
+        .photogrid-title {
+          background: linear-gradient(
+            135deg,
+            #1f2937 0%,
+            #374151 25%,
+            #ec4899 50%,
+            #f43f5e 75%,
+            #1f2937 100%
+          );
+          background-size: 200% 200%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: photogridGradient 8s ease-in-out infinite;
+        }
+        
+        @keyframes photogridGradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+      `}</style>
 
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(219,39,119,0.1),transparent_50%)]" />
-      </div>
+      <section className="relative py-20 px-4 bg-gradient-to-br from-gray-50 via-white to-pink-50/30 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(15)].map((_, i) => (
+            <FloatingElement key={i} delay={i * 0.8} />
+          ))}
+        </div>
 
-      <div className="max-w-7xl mx-auto relative z-10" ref={containerRef}>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={
-            isInView
-              ? {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 1, ease: [0.25, 0.46, 0.45, 0.94] },
-                }
-              : {}
-          }
-          className="text-center mb-16"
-        >
-          <motion.h2
-            className="text-4xl md:text-6xl font-light text-gray-800 mb-6 tracking-wide"
-            initial={{ opacity: 0 }}
-            animate={
-              isInView
-                ? {
-                    opacity: 1,
-                    transition: { duration: 1.2, delay: 0.3 },
-                  }
-                : {}
-            }
-          >
-            Captured{" "}
-            <span className="bg-gradient-to-r from-pink-600 to-rose-500 bg-clip-text text-transparent font-medium">
-              Memories
-            </span>
-          </motion.h2>
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(219,39,119,0.1),transparent_50%)]" />
+        </div>
 
-          <motion.p
-            className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed"
-            initial={{ opacity: 0 }}
-            animate={
-              isInView
-                ? {
-                    opacity: 1,
-                    transition: { duration: 1, delay: 0.6 },
-                  }
-                : {}
-            }
-          >
-            Every celebration tells a story. From intimate moments to grand celebrations, we capture the essence of your
-            most precious memories.
-          </motion.p>
-
+        <div className="max-w-7xl mx-auto relative z-10" ref={containerRef}>
           <motion.div
-            className="w-24 h-[1px] bg-gradient-to-r from-transparent via-pink-400 to-transparent mx-auto mt-8"
-            initial={{ scaleX: 0 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={
               isInView
                 ? {
-                    scaleX: 1,
-                    transition: { duration: 1.5, delay: 0.9 },
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 1, ease: [0.25, 0.46, 0.45, 0.94] },
                   }
                 : {}
             }
-          />
-        </motion.div>
-
-        {/* Custom Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Column 1 */}
-          <div className="flex flex-col">
-            {columns[0].map((item, index) => (
-              <PhotoCard key={`col1-${item.originalIndex}`} item={item} index={item.originalIndex} />
-            ))}
-          </div>
-
-          {/* Column 2 */}
-          <div className="flex flex-col">
-            {columns[1].map((item, index) => (
-              <PhotoCard key={`col2-${item.originalIndex}`} item={item} index={item.originalIndex} />
-            ))}
-
-            {/* CTA Button positioned in column 2 */}
-            <motion.div
-              className="mt-8 mb-6"
-              initial={{ opacity: 0, y: 30 }}
+            className="text-center mb-16"
+          >
+            <motion.h2
+              className="font-playfair text-5xl md:text-7xl lg:text-8xl font-bold text-gray-800 mb-8 tracking-tight leading-none"
+              initial={{ opacity: 0 }}
               animate={
                 isInView
                   ? {
                       opacity: 1,
-                      y: 0,
-                      transition: { duration: 0.8, delay: 1.5 },
-                    }
-                  : {}
-              }
-            ></motion.div>
-          </div>
-
-          {/* Column 3 */}
-          <div className="flex flex-col">
-            {columns[2].map((item, index) => (
-              <PhotoCard key={`col3-${item.originalIndex}`} item={item} index={item.originalIndex} />
-            ))}
-
-            {/* Duplicate CTA Button positioned in column 3 */}
-            <motion.div
-              className="mt-8 mb-6"
-              initial={{ opacity: 0, y: 30 }}
-              animate={
-                isInView
-                  ? {
-                      opacity: 1,
-                      y: 0,
-                      transition: { duration: 0.8, delay: 1.7 },
+                      transition: { duration: 1.2, delay: 0.3 },
                     }
                   : {}
               }
             >
-              <motion.button
-                className="group relative w-full m-[150px] px-8 py-4 bg-white border border-pink-200 text-gray-800 rounded-2xl font-medium text-lg tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 cursor-hover"
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(219,39,119,0.1)",
-                }}
-                whileTap={{ scale: 0.98 }}
-                onClick={onNavigateToPortfolio}
-              >
-                <span className="relative z-10">View Complete Portfolio</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl opacity-0 group-hover:opacity-10"
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.button>
-            </motion.div>
-          </div>
+              Captured{" "}
+              <span className="photogrid-title font-medium">
+                Memories
+              </span>
+            </motion.h2>
 
-          {/* Column 4 */}
-          <div className="flex flex-col">
-            {columns[3].map((item, index) => (
-              <PhotoCard key={`col4-${item.originalIndex}`} item={item} index={item.originalIndex} />
-            ))}
+            <motion.p
+              className="font-inter text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={
+                isInView
+                  ? {
+                      opacity: 1,
+                      transition: { duration: 1, delay: 0.6 },
+                    }
+                  : {}
+              }
+            >
+              Every celebration tells a story. From intimate moments to grand celebrations, we capture the essence of your
+              most precious memories with <em className="font-cormorant text-pink-600">artistic vision</em>.
+            </motion.p>
+
+            <motion.div
+              className="w-24 h-[1px] bg-gradient-to-r from-transparent via-pink-400 to-transparent mx-auto mt-8"
+              initial={{ scaleX: 0 }}
+              animate={
+                isInView
+                  ? {
+                      scaleX: 1,
+                      transition: { duration: 1.5, delay: 0.9 },
+                    }
+                  : {}
+              }
+            />
+          </motion.div>
+
+          {/* Custom Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Column 1 */}
+            <div className="flex flex-col">
+              {columns[0].map((item, index) => (
+                <PhotoCard key={`col1-${item.originalIndex}`} item={item} index={item.originalIndex} />
+              ))}
+            </div>
+
+            {/* Column 2 */}
+            <div className="flex flex-col">
+              {columns[1].map((item, index) => (
+                <PhotoCard key={`col2-${item.originalIndex}`} item={item} index={item.originalIndex} />
+              ))}
+            </div>
+
+            {/* Column 3 */}
+            <div className="flex flex-col">
+              {columns[2].map((item, index) => (
+                <PhotoCard key={`col3-${item.originalIndex}`} item={item} index={item.originalIndex} />
+              ))}
+
+              {/* Enhanced CTA Button positioned in column 3 */}
+              <motion.div
+                className="mt-8 mb-6"
+                initial={{ opacity: 0, y: 30 }}
+                animate={
+                  isInView
+                    ? {
+                        opacity: 1,
+                        y: 0,
+                        transition: { duration: 0.8, delay: 1.7 },
+                      }
+                    : {}
+                }
+              >
+                <motion.button
+                  className="group relative w-full px-8 py-5 bg-white border-2 border-pink-200 text-gray-800 rounded-3xl font-space font-semibold text-lg tracking-wide shadow-xl hover:shadow-2xl transition-all duration-300 cursor-hover overflow-hidden"
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 25px 50px rgba(219,39,119,0.15)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={onNavigateToPortfolio}
+                >
+                  <span className="relative z-10 uppercase tracking-wider">View Complete Portfolio</span>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-pink-500 to-rose-500 rounded-3xl opacity-0 group-hover:opacity-10"
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.button>
+              </motion.div>
+            </div>
+
+            {/* Column 4 */}
+            <div className="flex flex-col">
+              {columns[3].map((item, index) => (
+                <PhotoCard key={`col4-${item.originalIndex}`} item={item} index={item.originalIndex} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
