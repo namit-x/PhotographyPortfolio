@@ -105,7 +105,7 @@ const projects: PhotoProject[] = [
   {
     id: 7,
     title: "Golden Hour Bliss",
-    category: "Couples",
+    category: "Events",
     description: "Romantic couple photography during magical golden hour",
     image: "https://images.pexels.com/photos/1381679/pexels-photo-1381679.jpeg?auto=compress&cs=tinysrgb&w=800",
     images: [
@@ -131,23 +131,9 @@ const projects: PhotoProject[] = [
     year: "2023"
   },
   {
-    id: 9,
-    title: "Product Perfection",
-    category: "Commercial",
-    description: "Professional product photography for e-commerce brands",
-    image: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=800",
-    images: [
-      "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "https://images.pexels.com/photos/3965557/pexels-photo-3965557.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "https://images.pexels.com/photos/39866/entrepreneur-startup-start-up-man-39866.jpeg?auto=compress&cs=tinysrgb&w=1200"
-    ],
-    location: "Bangalore",
-    year: "2023"
-  },
-  {
     id: 10,
     title: "New Beginnings",
-    category: "Maternity",
+    category: "Weddings",
     description: "Tender maternity photography celebrating new life",
     image: "https://images.pexels.com/photos/4666754/pexels-photo-4666754.jpeg?auto=compress&cs=tinysrgb&w=800",
     images: [
@@ -161,7 +147,7 @@ const projects: PhotoProject[] = [
   {
     id: 11,
     title: "Little Wonders",
-    category: "Newborn",
+    category: "Weddings",
     description: "Adorable newborn photography sessions",
     image: "https://images.pexels.com/photos/1620765/pexels-photo-1620765.jpeg?auto=compress&cs=tinysrgb&w=800",
     images: [
@@ -175,7 +161,7 @@ const projects: PhotoProject[] = [
   {
     id: 12,
     title: "Wild & Free",
-    category: "Adventure",
+    category: "Portraits",
     description: "Outdoor adventure and travel photography",
     image: "https://images.pexels.com/photos/2386310/pexels-photo-2386310.jpeg?auto=compress&cs=tinysrgb&w=800",
     images: [
@@ -189,7 +175,7 @@ const projects: PhotoProject[] = [
   {
     id: 13,
     title: "Architectural Symmetry",
-    category: "Architecture",
+    category: "Events",
     description: "Stunning architectural photography highlighting design",
     image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
     images: [

@@ -230,7 +230,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                   ease: "easeInOut",
                 }}
               >
-                Where moments become timeless
+                Reflection of your loving moments
               </motion.p>
             </motion.div>
           )}

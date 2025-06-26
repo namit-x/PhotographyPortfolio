@@ -1,83 +1,109 @@
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [isHovering, setIsHovering] = useState(false)
-  const [isClicking, setIsClicking] = useState(false)
-  const [isPointer, setIsPointer] = useState(false)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
+  const [isPointer, setIsPointer] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [lastMoveTime, setLastMoveTime] = useState(0);
 
   useEffect(() => {
-    document.body.style.cursor = 'none'
+    document.body.style.cursor = "none";
 
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
+      setMousePosition({ x: e.clientX, y: e.clientY });
+      setIsVisible(true);
+      setLastMoveTime(Date.now());
 
-      const target = e.target as HTMLElement
-      const computedStyle = window.getComputedStyle(target)
+      const target = e.target as HTMLElement;
+      const computedStyle = window.getComputedStyle(target);
       const isPointerElement =
-        computedStyle.cursor === 'pointer' ||
-        target.tagName === 'A' ||
-        target.tagName === 'BUTTON' ||
-        target.hasAttribute('onclick') ||
-        target.getAttribute('role') === 'button'
+        computedStyle.cursor === "pointer" ||
+        target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        target.hasAttribute("onclick") ||
+        target.getAttribute("role") === "button";
 
-      setIsPointer(isPointerElement)
-    }
+      setIsPointer(isPointerElement);
+    };
 
     const handleMouseEnter = (e: Event) => {
-      setIsHovering(true)
-      const target = e.target as HTMLElement
-      if (window.getComputedStyle(target).cursor === 'pointer') {
-        setIsPointer(true)
+      setIsHovering(true);
+      const target = e.target as HTMLElement;
+      if (window.getComputedStyle(target).cursor === "pointer") {
+        setIsPointer(true);
       }
-    }
+    };
 
     const handleMouseLeave = () => {
-      setIsHovering(false)
-      setIsPointer(false)
-    }
+      setIsHovering(false);
+      setIsPointer(false);
+    };
 
-    const handleMouseDown = () => setIsClicking(true)
-    const handleMouseUp = () => setIsClicking(false)
+    const handleMouseDown = () => setIsClicking(true);
+    const handleMouseUp = () => setIsClicking(false);
+
+    const handleMouseEnterWindow = () => {
+      setIsVisible(true);
+    };
+
+    const handleMouseLeaveWindow = () => {
+      setIsVisible(false);
+    };
+
+    // Fallback for when mouseleave doesn't fire
+    const checkMouseActivity = () => {
+      if (Date.now() - lastMoveTime > 1000 && isVisible) {
+        setIsVisible(false);
+      }
+    };
+
+    const activityCheckInterval = setInterval(checkMouseActivity, 1000);
 
     const interactiveElements = document.querySelectorAll(
       'button, a, [role="button"], .cursor-hover, input, textarea, select, [onclick]'
-    )
+    );
 
     interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleMouseEnter)
-      el.addEventListener("mouseleave", handleMouseLeave)
-    })
+      el.addEventListener("mouseenter", handleMouseEnter);
+      el.addEventListener("mouseleave", handleMouseLeave);
+    });
 
-    window.addEventListener("mousemove", updateMousePosition)
-    window.addEventListener("mousedown", handleMouseDown)
-    window.addEventListener("mouseup", handleMouseUp)
+    window.addEventListener("mousemove", updateMousePosition);
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseenter", handleMouseEnterWindow);
+    window.addEventListener("mouseleave", handleMouseLeaveWindow);
+    document.addEventListener("mouseleave", handleMouseLeaveWindow); // Additional check
 
     return () => {
-      document.body.style.cursor = ''
-      window.removeEventListener("mousemove", updateMousePosition)
-      window.removeEventListener("mousedown", handleMouseDown)
-      window.removeEventListener("mouseup", handleMouseUp)
+      document.body.style.cursor = "";
+      clearInterval(activityCheckInterval);
+      window.removeEventListener("mousemove", updateMousePosition);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseenter", handleMouseEnterWindow);
+      window.removeEventListener("mouseleave", handleMouseLeaveWindow);
+      document.removeEventListener("mouseleave", handleMouseLeaveWindow);
       interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", handleMouseEnter)
-        el.removeEventListener("mouseleave", handleMouseLeave)
-      })
-    }
-  }, [])
+        el.removeEventListener("mouseenter", handleMouseEnter);
+        el.removeEventListener("mouseleave", handleMouseLeave);
+      });
+    };
+  }, [lastMoveTime]);
 
-  // Calculate rotation angle based on position to point toward top-left
   const getRotationAngle = () => {
-    if (isPointer) return 0
-    
-    const centerX = window.innerWidth / 2
-    const centerY = window.innerHeight / 2
-    const deltaX = mousePosition.x - centerX
-    const deltaY = mousePosition.y - centerY
-    
-    // Base angle (-30°) plus dynamic adjustment
-    return 10 + (deltaX * 0.02) - (deltaY * 0.02)
-  }
+    if (isPointer) return 0;
+
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const deltaX = mousePosition.x - centerX;
+    const deltaY = mousePosition.y - centerY;
+
+    return -10 + deltaX * 0.02 - deltaY * 0.02;
+  };
 
   return (
     <>
@@ -86,12 +112,14 @@ export default function CustomCursor() {
         style={{
           left: mousePosition.x,
           top: mousePosition.y,
-          transform: 'translate(-50%, -50%)',
-          transformOrigin: 'center'
+          transform: "translate(-50%, -50%)",
+          transformOrigin: "center",
+          outline: "none",
         }}
         animate={{
-          scale: isClicking ? 0.9 : (isHovering || isPointer) ? 1.5 : 1,
+          scale: isClicking ? 1.2 : isHovering || isPointer ? 2.2 : 1.5,
           rotate: getRotationAngle(),
+          opacity: isVisible ? 1 : 0,
         }}
         transition={{
           type: "spring",
@@ -103,7 +131,7 @@ export default function CustomCursor() {
         {isPointer ? (
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
-              d="M10 4C7.2 4 5 6.2 5 9V14C5 16.8 7.2 19 10 19H15C17.8 19 20 16.8 20 14V9C20 6.2 17.8 4 15 4H10Z"
+              d="M2 2L18 10L8 12L6 18L2 2Z"
               fill="white"
               stroke="black"
               strokeWidth="0.5"
@@ -126,12 +154,14 @@ export default function CustomCursor() {
         style={{
           left: mousePosition.x,
           top: mousePosition.y,
-          transform: 'translate(-50%, -50%)'
+          transform: "translate(-50%, -50%)",
+          outline: "none",
+          boxShadow: "none",
         }}
         animate={{
-          scale: (isHovering || isPointer) ? 1.8 : 0,
-          opacity: (isHovering || isPointer) ? 0.3 : 0,
-          backgroundColor: isPointer ? '#3b82f6' : '#ec4899'
+          scale: isHovering || isPointer ? 1.8 : 0,
+          opacity: isVisible ? (isHovering || isPointer ? 0.3 : 0) : 0,
+          backgroundColor: isPointer ? "#3b82f6" : "#ec4899",
         }}
         transition={{
           type: "spring",
@@ -142,5 +172,5 @@ export default function CustomCursor() {
         <div className="w-5 h-5 rounded-full blur-sm" />
       </motion.div>
     </>
-  )
+  );
 }

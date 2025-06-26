@@ -141,7 +141,7 @@ export default function Hero() {
             transition={{ duration: 1, delay: 0.8 }}
             className="text-xl md:text-2xl mb-8 text-pink-100/90 font-light"
           >
-            Where moments become timeless memories
+            Reflection of your loving moments
           </motion.p>
 
           <AnimatePresence mode="wait">
@@ -191,7 +191,7 @@ export default function Hero() {
             transition={{ duration: 1, delay: 0.8 }}
             className="text-xl md:text-2xl mb-8 text-pink-100 font-light"
           >
-            Where moments become timeless memories
+            Reflection of your loving moments
           </motion.p>
 
           <div className="h-px w-32 bg-pink-400 mx-auto mb-8"></div>

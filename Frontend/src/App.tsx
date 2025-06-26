@@ -5,6 +5,7 @@ import Hero from "./components/Hero"
 import CustomCursor from "./components/CustomCursor"
 import PhotoGrid from "./components/PhotoGrid"
 import Portfolio from "./components/Portfolio"
+import Contact from "./components/Contact"
 import GooeyNav from "./components/Navbar"
 
 type CurrentPage = "home" | "portfolio" | "studio" | "contact"
@@ -78,8 +79,9 @@ function App() {
             className="relative"
           >
             {/* Gooey Navigation - Fixed positioning */}
-            <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+            <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
               <GooeyNav
+                key={currentPage} // Add this line to force re-render when page changes
                 items={navItems}
                 initialActiveIndex={getActiveIndex()}
                 onItemClick={handleNavClick}
@@ -103,7 +105,7 @@ function App() {
                   transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 >
                   <Hero />
-                  <PhotoGrid />
+                  <PhotoGrid onNavigateToPortfolio={() => setCurrentPage("portfolio")} />
                 </motion.div>
               ) : currentPage === "portfolio" ? (
                 <motion.div
@@ -136,12 +138,8 @@ function App() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="min-h-screen flex items-center justify-center"
                 >
-                  <div className="text-center text-white">
-                    <h1 className="text-6xl font-bold mb-4">Contact</h1>
-                    <p className="text-xl text-gray-300">Get in touch with us...</p>
-                  </div>
+                  <Contact />
                 </motion.div>
               ) : null}
             </AnimatePresence>
