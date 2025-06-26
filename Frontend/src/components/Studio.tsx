@@ -173,7 +173,7 @@ export default function Studio() {
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: "url(/studio.jpg)",
+              backgroundImage: "url(/studio/studio.jpg)",
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90" />

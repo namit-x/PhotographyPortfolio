@@ -84,7 +84,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
         setTimeout(() => {
           try {
             element.removeChild(particle)
-          } catch {}
+          } catch { }
         }, t)
       }, 30)
     }
@@ -111,8 +111,18 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     updateEffectPosition(liEl)
 
     // Call the external click handler
+    if (items[index].onClick) {
+      items[index].onClick!();
+    }
+
+    // Call the external click handler
     if (onItemClick) {
-      onItemClick(index, items[index])
+      onItemClick(index, items[index]);
+    }
+
+    // Only prevent default if we're handling navigation ourselves
+    if (!items[index].href || items[index].onClick) {
+      e.preventDefault();
     }
 
     if (filterRef.current) {
@@ -140,21 +150,44 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
   }
 
   useEffect(() => {
-    if (!navRef.current || !containerRef.current) return
-    const activeLi = navRef.current.querySelectorAll("li")[activeIndex] as HTMLElement
-    if (activeLi) {
-      updateEffectPosition(activeLi)
-      textRef.current?.classList.add("active")
-    }
-    const resizeObserver = new ResizeObserver(() => {
-      const currentActiveLi = navRef.current?.querySelectorAll("li")[activeIndex] as HTMLElement
+    if (!navRef.current || !containerRef.current || !filterRef.current || !textRef.current) return;
+
+    const activeLi = navRef.current.querySelectorAll("li")[activeIndex] as HTMLElement;
+    if (!activeLi) return;
+
+    // Ensure active class is properly set
+    navRef.current.querySelectorAll("li").forEach((li, idx) => {
+      li.classList.toggle("active", idx === activeIndex);
+    });
+
+    // Update positions and effects
+    updateEffectPosition(activeLi);
+    textRef.current.classList.add("active");
+
+    // Clean up any existing particles before creating new ones
+    const particles = filterRef.current.querySelectorAll(".particle");
+    particles.forEach((p) => p.remove());
+
+    // Create new particles
+    makeParticles(filterRef.current);
+
+    // Handle responsive positioning
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (!entries[0]) return;
+      const currentActiveLi = navRef.current?.querySelectorAll("li")[activeIndex] as HTMLElement;
       if (currentActiveLi) {
-        updateEffectPosition(currentActiveLi)
+        updateEffectPosition(currentActiveLi);
       }
-    })
-    resizeObserver.observe(containerRef.current)
-    return () => resizeObserver.disconnect()
-  }, [activeIndex])
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+      // Clean up any running animations
+      textRef.current?.classList.remove("active");
+    };
+  }, [activeIndex]);
 
   // Add this effect to trigger gooey animation on initial render
   useEffect(() => {
@@ -340,16 +373,21 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                className={`py-3 px-5 rounded-full relative cursor-pointer transition-all duration-300 ease font-medium text-sm tracking-wide cursor-hover ${
-                  activeIndex === index ? "active" : ""
-                }`}
+                className={`py-3 px-5 rounded-full relative cursor-pointer transition-all duration-300 ease font-medium text-sm tracking-wide cursor-hover ${activeIndex === index ? "active" : ""
+                  }`}
                 onClick={(e) => handleClick(e, index)}
               >
                 <a
                   href={item.href}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   className="outline-none cursor-hover"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    if (item.onClick) {
+                      e.preventDefault();
+                      item.onClick();
+                    }
+                  }}
+                  tabIndex={0}
                 >
                   {item.label}
                 </a>
