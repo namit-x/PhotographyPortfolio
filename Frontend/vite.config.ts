@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist',
+    outDir: 'docs',
     emptyOutDir: true,
-    chunkSizeWarningLimit: 3000 // Needed for Three.js
+    chunkSizeWarningLimit: 3000
   },
 })
