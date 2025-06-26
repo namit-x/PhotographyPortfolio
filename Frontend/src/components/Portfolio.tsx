@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { motion } from "framer-motion"
-import { Camera, Heart, Users, Sparkles } from 'lucide-react'
+import { motion, AnimatePresence } from "framer-motion"
+import { Camera, Heart, Users, Sparkles, ChevronLeft, ChevronRight, X } from 'lucide-react'
 
 interface PhotoProject {
   id: number
@@ -9,6 +9,7 @@ interface PhotoProject {
   description: string
   image: string
   images: string[]
+  videos?: string[]
   location?: string
   year?: string
 }
@@ -84,6 +85,9 @@ const projects: PhotoProject[] = [
       "https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=1200",
       "https://images.pexels.com/photos/1157557/pexels-photo-1157557.jpeg?auto=compress&cs=tinysrgb&w=1200",
       "https://images.pexels.com/photos/1024960/pexels-photo-1024960.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    ],
+    videos: [
+      "https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
     ],
     location: "Chennai",
     year: "2024",
@@ -192,18 +196,47 @@ export default function Portfolio() {
   const [selectedCategory, setSelectedCategory] = useState<PhotoCategory>("All")
   const [selectedProject, setSelectedProject] = useState<PhotoProject | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0)
 
   const filteredProjects =
     selectedCategory === "All" ? projects : projects.filter((project) => project.category === selectedCategory)
 
   const handleProjectClick = (project: PhotoProject) => {
     setSelectedProject(project)
+    setCurrentMediaIndex(0)
     setIsDialogOpen(true)
   }
 
   const closeDialog = () => {
     setIsDialogOpen(false)
     setSelectedProject(null)
+    setCurrentMediaIndex(0)
+  }
+
+  const getCurrentMedia = () => {
+    if (!selectedProject) return null
+    
+    const allMedia = [
+      ...selectedProject.images.map(url => ({ type: 'image', url })),
+      ...(selectedProject.videos || []).map(url => ({ type: 'video', url }))
+    ]
+    
+    return allMedia
+  }
+
+  const navigateMedia = (direction: 'prev' | 'next') => {
+    const media = getCurrentMedia()
+    if (!media) return
+
+    if (direction === 'prev') {
+      setCurrentMediaIndex(prev => prev === 0 ? media.length - 1 : prev - 1)
+    } else {
+      setCurrentMediaIndex(prev => prev === media.length - 1 ? 0 : prev + 1)
+    }
+  }
+
+  const isVideo = (url: string) => {
+    return url.includes('.mp4') || url.includes('.webm') || url.includes('.mov') || url.includes('video')
   }
 
   const fadeInUp = {
@@ -385,11 +418,16 @@ export default function Portfolio() {
                 transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 <img
-                  src={project.image || "/placeholder.svg"}
+                  src={project.images[0] || project.image || "/placeholder.svg"}
                   alt={project.title}
                   className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />
+
+                {/* Image count indicator */}
+                <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
+                  {project.images.length + (project.videos?.length || 0)} items
+                </div>
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -454,50 +492,131 @@ export default function Portfolio() {
           </motion.div>
         </div>
 
-        {/* Enhanced Image Dialog */}
-        {selectedProject && isDialogOpen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeDialog}
-          >
+        {/* Enhanced Media Gallery Dialog */}
+        <AnimatePresence>
+          {selectedProject && isDialogOpen && (
             <motion.div
-              className="relative max-w-5xl max-h-[90vh] glass-filter rounded-3xl overflow-hidden"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              onClick={(e) => e.stopPropagation()}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeDialog}
             >
-              <button
-                onClick={closeDialog}
-                className="absolute top-6 right-6 z-10 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-200 flex items-center justify-center cursor-hover font-bold text-xl"
+              <motion.div
+                className="relative max-w-7xl max-h-[95vh] w-full glass-filter rounded-3xl overflow-hidden"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                onClick={(e) => e.stopPropagation()}
               >
-                ×
-              </button>
+                {/* Header */}
+                <div className="flex items-center justify-between p-6 border-b border-white/10">
+                  <div>
+                    <h3 className="font-playfair text-2xl font-bold text-white">{selectedProject.title}</h3>
+                    <p className="text-gray-400 text-sm">{getCurrentMedia()?.length} items</p>
+                  </div>
+                  <button
+                    onClick={closeDialog}
+                    className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-200 flex items-center justify-center cursor-hover"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
-              <img
-                src={selectedProject.image || "/placeholder.svg"}
-                alt={selectedProject.title}
-                className="w-full h-auto max-h-[70vh] object-contain"
-              />
+                {/* Media Display */}
+                <div className="relative flex-1 bg-black/50">
+                  {getCurrentMedia() && getCurrentMedia()![currentMediaIndex] && (
+                    <div className="relative h-[60vh] flex items-center justify-center">
+                      {isVideo(getCurrentMedia()![currentMediaIndex].url) ? (
+                        <video
+                          src={getCurrentMedia()![currentMediaIndex].url}
+                          controls
+                          autoPlay
+                          className="max-w-full max-h-full object-contain rounded-lg"
+                        />
+                      ) : (
+                        <img
+                          src={getCurrentMedia()![currentMediaIndex].url}
+                          alt={`${selectedProject.title} - Image ${currentMediaIndex + 1}`}
+                          className="max-w-full max-h-full object-contain rounded-lg"
+                        />
+                      )}
 
-              <div className="p-8">
-                <h3 className="font-playfair text-3xl font-bold text-white mb-3">{selectedProject.title}</h3>
-                <p className="font-inter text-gray-400 mb-6 text-lg leading-relaxed">{selectedProject.description}</p>
-                {selectedProject.location && (
-                  <div className="flex items-center gap-4 text-sm text-gray-500 font-inter">
-                    <span>{selectedProject.location}</span>
-                    {selectedProject.year && <span>•</span>}
-                    {selectedProject.year && <span>{selectedProject.year}</span>}
+                      {/* Navigation Controls */}
+                      {getCurrentMedia() && getCurrentMedia()!.length > 1 && (
+                        <>
+                          <button
+                            onClick={() => navigateMedia('prev')}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/70 backdrop-blur-sm text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center cursor-hover"
+                          >
+                            <ChevronLeft className="w-6 h-6" />
+                          </button>
+                          <button
+                            onClick={() => navigateMedia('next')}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/70 backdrop-blur-sm text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center cursor-hover"
+                          >
+                            <ChevronRight className="w-6 h-6" />
+                          </button>
+                        </>
+                      )}
+
+                      {/* Media Counter */}
+                      {getCurrentMedia() && getCurrentMedia()!.length > 1 && (
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm">
+                          {currentMediaIndex + 1} / {getCurrentMedia()!.length}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Thumbnail Navigation */}
+                {getCurrentMedia() && getCurrentMedia()!.length > 1 && (
+                  <div className="p-6 border-t border-white/10">
+                    <div className="flex gap-4 overflow-x-auto">
+                      {getCurrentMedia()!.map((media, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentMediaIndex(index)}
+                          className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                            currentMediaIndex === index
+                              ? 'border-pink-500 ring-2 ring-pink-500/50'
+                              : 'border-white/20 hover:border-white/40'
+                          }`}
+                        >
+                          {isVideo(media.url) ? (
+                            <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                              <Camera className="w-6 h-6 text-white" />
+                            </div>
+                          ) : (
+                            <img
+                              src={media.url}
+                              alt={`Thumbnail ${index + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                          )}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </div>
+
+                {/* Project Info */}
+                <div className="p-6 border-t border-white/10">
+                  <p className="font-inter text-gray-400 mb-4 text-lg leading-relaxed">{selectedProject.description}</p>
+                  {selectedProject.location && (
+                    <div className="flex items-center gap-4 text-sm text-gray-500 font-inter">
+                      <span>{selectedProject.location}</span>
+                      {selectedProject.year && <span>•</span>}
+                      {selectedProject.year && <span>{selectedProject.year}</span>}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
+          )}
+        </AnimatePresence>
       </div>
     </>
   )

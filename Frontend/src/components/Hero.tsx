@@ -167,17 +167,17 @@ export default function Hero() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="max-w-5xl px-8 py-16 glass-card rounded-3xl"
+            className="max-w-3xl px-6 py-8 backdrop-blur-sm bg-black/40 rounded-2xl border border-white/10 shadow-xl"
           >
-            <h1 className="font-playfair text-7xl md:text-9xl lg:text-[10rem] font-bold mb-8 hero-title tracking-tight leading-none">
-              Namit Studio
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-rose-500 bg-clip-text text-transparent">
+              Meenakshi Studio
             </h1>
 
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="font-cormorant text-2xl md:text-3xl lg:text-4xl mb-12 text-pink-100/90 font-light italic hero-subtitle leading-relaxed"
+              className="text-xl md:text-2xl mb-6 text-pink-100/85 font-light italic"
             >
               "Reflection of your loving moments"
             </motion.p>
@@ -189,12 +189,12 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="mb-10 bg-white/5 backdrop-blur-sm p-8 rounded-2xl border border-white/10"
+                className="mb-6 bg-white/5 p-4 rounded-lg backdrop-blur-xs"
               >
-                <h2 className="font-space text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 text-white tracking-wide">
+                <h2 className="text-xl md:text-2xl font-semibold mb-2 text-white">
                   {currentMedia.title}
                 </h2>
-                <p className="font-inter text-lg md:text-xl text-pink-50/80 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-base md:text-lg text-pink-50/80 max-w-xl mx-auto">
                   {currentMedia.description}
                 </p>
               </motion.div>
@@ -204,14 +204,11 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 1.2 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="group relative font-space bg-gradient-to-r from-pink-600 to-rose-700 text-white px-10 py-5 rounded-full text-lg font-semibold shadow-2xl hover:shadow-rose-500/40 transition-all duration-300 border border-white/20 overflow-hidden"
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              className="bg-gradient-to-r from-pink-500 to-rose-600 text-white px-6 py-3 rounded-full text-base md:text-lg font-semibold shadow-lg hover:shadow-rose-500/30 transition-all duration-300 border border-white/20"
             >
-              <span className="relative z-10 tracking-wide uppercase">Explore Our Work</span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              />
+              Explore Our Work
             </motion.button>
           </motion.div>
         </div>

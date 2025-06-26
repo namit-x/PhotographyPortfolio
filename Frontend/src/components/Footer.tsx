@@ -147,7 +147,7 @@ export default function Footer() {
               <motion.div className="lg:col-span-1" variants={fadeIn}>
                 <div className="mb-8">
                   <h3 className="font-playfair text-3xl font-bold text-white mb-4">
-                    <span className="gradient-text-footer">Namit</span>
+                    <span className="gradient-text-footer">Chirag</span>
                     <br />
                     <span className="font-space text-2xl font-light tracking-wider">STUDIO</span>
                   </h3>
@@ -221,7 +221,7 @@ export default function Footer() {
                 <div className="space-y-4 mb-8">
                   <div className="flex items-center space-x-3">
                     <MapPin className="w-4 h-4 text-pink-400 flex-shrink-0" />
-                    <span className="font-inter text-gray-400 text-sm">Mumbai, Maharashtra, India</span>
+                    <span className="font-inter text-gray-400 text-sm">Rohtak, Haryana, India</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Phone className="w-4 h-4 text-pink-400 flex-shrink-0" />
@@ -257,7 +257,7 @@ export default function Footer() {
             <div className="max-w-7xl mx-auto px-4">
               <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div className="flex items-center space-x-4">
-                  <p className="font-inter text-gray-500 text-sm">© 2024 Namit Studio. All rights reserved.</p>
+                  <p className="font-inter text-gray-500 text-sm">© 2024  Studio. All rights reserved.</p>
                   <div className="hidden md:flex items-center space-x-2 text-gray-600">
                     <Camera className="w-4 h-4" />
                     <span className="font-inter text-xs">Crafted with</span>

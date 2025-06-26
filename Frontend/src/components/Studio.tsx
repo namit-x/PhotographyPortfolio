@@ -14,7 +14,7 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     id: 1,
-    name: "Namit Sharma",
+    name: "Chirag Sharma",
     role: "Lead Photographer & Founder",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&q=80",
     specialty: "Wedding & Portrait Photography",
@@ -218,8 +218,8 @@ export default function Studio() {
                 className="font-playfair text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-tight mb-8 text-shadow-glow"
                 variants={fadeIn}
               >
-                <span className="bg-gradient-to-r from-white via-pink-100 to-rose-200 bg-clip-text text-transparent italic">
-                  Namit
+                <span className="bg-gradient-to-r from-white via-pink-100 to-rose-200 bg-clip-text text-transparent italic px-4">
+                  Chirag
                 </span>
                 <br />
                 <span className="font-space text-white font-light tracking-[0.1em] text-5xl md:text-7xl lg:text-8xl">
@@ -284,30 +284,6 @@ export default function Studio() {
                     THAT LAST FOREVER
                   </span>
                 </motion.h2>
-
-                <motion.div className="space-y-6 mb-10" variants={fadeIn}>
-                  <p className="font-inter text-gray-300 leading-relaxed text-lg">
-                    Since 2016, Namit Studio has been the{" "}
-                    <em className="font-crimson text-pink-300">reflection of your loving moments</em>. We don't just
-                    capture photographs; we preserve emotions, freeze time, and create visual stories that speak to the
-                    heart.
-                  </p>
-
-                  <p className="font-inter text-gray-400 leading-relaxed text-lg">
-                    Our approach combines{" "}
-                    <strong className="font-space text-white font-semibold">artistic vision</strong> with technical
-                    excellence, ensuring every frame tells your unique story. From intimate portraits to grand
-                    celebrations, we bring passion, creativity, and professionalism to every shoot.
-                  </p>
-                </motion.div>
-
-                <motion.div className="flex flex-wrap gap-4" variants={fadeIn}>
-                  {["Award-Winning Studio", "Professional Team", "Latest Equipment"].map((badge, index) => (
-                    <div key={index} className="glass-morphism rounded-full px-6 py-3 gradient-border">
-                      <span className="font-space text-pink-300 text-sm font-medium tracking-wide">{badge}</span>
-                    </div>
-                  ))}
-                </motion.div>
               </div>
 
               <motion.div className="relative" variants={fadeIn}>
@@ -315,7 +291,7 @@ export default function Studio() {
                   <div className="space-y-6">
                     <div className="relative group">
                       <img
-                        src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=800&q=80"
+                        src="/studio/Happy.jpg"
                         alt="Studio Work"
                         className="rounded-3xl shadow-2xl w-full h-64 object-cover transform transition-transform duration-700 group-hover:scale-105"
                       />
@@ -333,7 +309,7 @@ export default function Studio() {
                   <div className="space-y-6 mt-8">
                     <div className="relative group">
                       <img
-                        src="https://images.unsplash.com/photo-1494790108755-2616c9c0b8d3?w=800&q=80"
+                        src="/studio/Free.jpg"
                         alt="Portrait Session"
                         className="rounded-3xl shadow-2xl w-full h-48 object-cover transform transition-transform duration-700 group-hover:scale-105"
                       />
@@ -443,7 +419,7 @@ export default function Studio() {
                   </div>
 
                   {/* Always visible name overlay for mobile */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent md:hidden landscape:hidden transition-opacity duration-300">
                     <h3 className="font-playfair text-xl font-bold text-white mb-1">{member.name}</h3>
                     <p className="font-space text-pink-400 text-sm uppercase tracking-wider">{member.role}</p>
                   </div>
