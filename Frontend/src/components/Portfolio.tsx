@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, type Variants } from "framer-motion"
 import { Camera, Heart, Users, Sparkles, ChevronLeft, ChevronRight, X } from 'lucide-react'
 
 interface PhotoProject {
@@ -239,7 +239,7 @@ export default function Portfolio() {
     return url.includes('.mp4') || url.includes('.webm') || url.includes('.mov') || url.includes('video')
   }
 
-  const fadeInUp = {
+  const fadeInUp: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: (i: number) => ({
       opacity: 1,
@@ -250,7 +250,7 @@ export default function Portfolio() {
         ease: 'easeInOut',
       },
     }),
-  }
+  };
 
   const getCategoryIcon = (category: PhotoCategory) => {
     switch (category) {
@@ -268,7 +268,7 @@ export default function Portfolio() {
   return (
     <>
       {/* Enhanced Typography Styles */}
-      <style jsx global>{`
+      <style>{`
         .portfolio-title {
           background: linear-gradient(
             135deg,

@@ -49,7 +49,7 @@ function App() {
     },
   ];
 
-  const handleNavClick = (index: number, item: any) => {
+  const handleNavClick = (item: any) => {
     if (item.onClick) {
       item.onClick();
     }
@@ -68,14 +68,6 @@ function App() {
       default:
         return 0;
     }
-  };
-
-  // Animation variants for consistent transitions
-  const pageVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
   };
 
   return (
@@ -115,7 +107,10 @@ function App() {
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  transition={pageVariants.transition}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.4, 0, 0.2, 1] as const,
+                  }}
                 >
                   <Hero />
                   <PhotoGrid onNavigateToPortfolio={() => setCurrentPage("portfolio")} />
@@ -127,10 +122,13 @@ function App() {
               {currentPage === "portfolio" && (
                 <motion.div
                   key="portfolio"
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  transition={pageVariants.transition}
+                  initial={{ opacity: 0, x: -100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 100 }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.4, 0, 0.2, 1] as const,
+                  }}
                 >
                   <Portfolio />
                 </motion.div>
@@ -139,10 +137,13 @@ function App() {
               {currentPage === "studio" && (
                 <motion.div
                   key="studio"
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  transition={pageVariants.transition}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 50 }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeInOut",
+                  }}
                   className="min-h-screen flex items-center justify-center"
                 >
                   <Studio />
@@ -152,10 +153,13 @@ function App() {
               {currentPage === "contact" && (
                 <motion.div
                   key="contact"
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  transition={pageVariants.transition}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeOut",
+                  }}
                 >
                   <Contact />
                 </motion.div>

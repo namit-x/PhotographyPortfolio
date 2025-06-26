@@ -296,7 +296,7 @@ export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}
   return (
     <>
       {/* Enhanced Typography Styles */}
-      <style jsx global>{`
+      <style>{`
         .photogrid-title {
           background: linear-gradient(
             135deg,
@@ -396,21 +396,21 @@ export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Column 1 */}
             <div className="flex flex-col">
-              {columns[0].map((item, index) => (
+              {columns[0].map((item) => (
                 <PhotoCard key={`col1-${item.originalIndex}`} item={item} index={item.originalIndex} />
               ))}
             </div>
 
             {/* Column 2 */}
             <div className="flex flex-col">
-              {columns[1].map((item, index) => (
+              {columns[1].map((item) => (
                 <PhotoCard key={`col2-${item.originalIndex}`} item={item} index={item.originalIndex} />
               ))}
             </div>
 
             {/* Column 3 */}
             <div className="flex flex-col">
-              {columns[2].map((item, index) => (
+              {columns[2].map((item) => (
                 <PhotoCard key={`col3-${item.originalIndex}`} item={item} index={item.originalIndex} />
               ))}
 
@@ -448,7 +448,7 @@ export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}
 
             {/* Column 4 */}
             <div className="flex flex-col">
-              {columns[3].map((item, index) => (
+              {columns[3].map((item) => (
                 <PhotoCard key={`col4-${item.originalIndex}`} item={item} index={item.originalIndex} />
               ))}
             </div>

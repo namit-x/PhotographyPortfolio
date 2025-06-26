@@ -1,5 +1,5 @@
 import { motion, type Variants } from "framer-motion"
-import { Instagram, Facebook, Twitter, Mail, Phone, MapPin, Camera, Heart, Award } from "lucide-react"
+import { Instagram, Facebook, Twitter, Mail, Phone, MapPin} from "lucide-react"
 
 const socialLinks = [
   { icon: Instagram, href: "#", label: "Instagram", color: "hover:text-pink-400" },
@@ -19,12 +19,6 @@ const services = [
   { name: "Portrait Sessions", href: "#" },
   { name: "Event Coverage", href: "#" },
   { name: "Commercial Work", href: "#" },
-]
-
-const awards = [
-  { year: "2024", title: "Best Wedding Photographer" },
-  { year: "2023", title: "Portrait Excellence Award" },
-  { year: "2022", title: "Creative Vision Award" },
 ]
 
 const fadeIn: Variants = {

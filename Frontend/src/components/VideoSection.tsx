@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { Play, Pause, Volume2, VolumeX, Eye, Heart, Sparkles, Camera, Film } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { motion, AnimatePresence, useInView, type Variants } from 'framer-motion'
+import { Play, Pause, Volume2, VolumeX, Camera, Film } from 'lucide-react'
 
 interface VideoItem {
   id: number
@@ -10,6 +10,14 @@ interface VideoItem {
   src: string
   thumbnail: string
   duration: string
+}
+
+type ParticleSize = 'small' | 'medium' | 'large'
+
+interface VideoParticleProps {
+  delay?: number
+  duration?: number
+  size?: ParticleSize
 }
 
 const videoItems: VideoItem[] = [
@@ -69,9 +77,8 @@ const videoItems: VideoItem[] = [
   }
 ]
 
-// Cinematic floating particles for video section
-const VideoParticle = ({ delay = 0, duration = 12, size = "small" }) => {
-  const sizeClasses = {
+const VideoParticle = ({ delay = 0, duration = 12, size = "small" }: VideoParticleProps) => {
+  const sizeClasses: Record<ParticleSize, string> = {
     small: "w-1 h-1",
     medium: "w-2 h-2",
     large: "w-3 h-3",
@@ -161,7 +168,7 @@ export default function VideoSection() {
     }
   }
 
-  const fadeInUp = {
+  const fadeInUp: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: (i: number) => ({
       opacity: 1,
@@ -169,10 +176,10 @@ export default function VideoSection() {
       transition: {
         delay: i * 0.1,
         duration: 0.8,
-        ease: [0.42, 0, 0.58, 1],
+        ease: 'easeInOut',
       },
     }),
-  }
+  };
 
   return (
     <div className="relative min-h-screen bg-black py-20 overflow-hidden">

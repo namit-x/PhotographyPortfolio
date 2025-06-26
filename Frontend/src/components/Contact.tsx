@@ -1,5 +1,4 @@
 import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence, useInView } from "framer-motion"
 import {
@@ -37,9 +36,22 @@ const eventTypes = [
   "Other",
 ]
 
+// Define the size types
+type ParticleSize = "small" | "medium" | "large"
+
+interface CinematicParticleProps {
+  delay?: number
+  duration?: number
+  size?: ParticleSize
+}
+
 // Cinematic floating particles
-const CinematicParticle = ({ delay = 0, duration = 8, size = "small" }) => {
-  const sizeClasses = {
+const CinematicParticle = ({
+  delay = 0,
+  duration = 8,
+  size = "small",
+}: CinematicParticleProps) => {
+  const sizeClasses: Record<ParticleSize, string> = {
     small: "w-1 h-1",
     medium: "w-2 h-2",
     large: "w-3 h-3",
@@ -70,8 +82,13 @@ const CinematicParticle = ({ delay = 0, duration = 8, size = "small" }) => {
   )
 }
 
-// Constellation background effect
-const ConstellationDot = ({ x, y, delay = 0 }) => (
+interface ConstellationDotProps {
+  x: number;
+  y: number;
+  delay?: number;
+}
+
+const ConstellationDot = ({ x, y, delay = 0 }: ConstellationDotProps) => (
   <motion.div
     className="absolute w-1 h-1 bg-pink-300/30 rounded-full"
     style={{ left: `${x}%`, top: `${y}%` }}

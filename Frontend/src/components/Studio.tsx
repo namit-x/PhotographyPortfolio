@@ -1,7 +1,4 @@
-"use client"
-
 import { motion } from "framer-motion"
-import Footer from "./Footer"
 
 interface TeamMember {
   id: number
@@ -40,19 +37,6 @@ const stats = [
   { number: "500+", label: "Celebrations Captured" },
   { number: "100%", label: "Client Satisfaction" },
   { number: "50+", label: "Awards Won" },
-]
-
-const values = [
-  {
-    title: "Vision",
-    content:
-      "To be the most trusted photography studio that transforms precious moments into timeless art, creating visual legacies that inspire generations.",
-  },
-  {
-    title: "Mission",
-    content:
-      "Delivering exceptional photography experiences that capture the essence of every celebration, emotion, and milestone with artistic excellence and personal touch.",
-  },
 ]
 
 import type { Variants } from 'framer-motion';
