@@ -279,7 +279,7 @@ export default function Studio({ onNavigateToPortfolio }: PhotoGridProps = {}) {
                   <div className="space-y-6">
                     <div className="relative group">
                       <img
-                        src="./studio/Happy.jpg"
+                        src="https://images.unsplash.com/photo-1542596594-649edbc13630"
                         alt="Studio Work"
                         className="rounded-3xl shadow-2xl w-full h-64 object-cover transform transition-transform duration-700 group-hover:scale-105"
                       />
@@ -297,7 +297,7 @@ export default function Studio({ onNavigateToPortfolio }: PhotoGridProps = {}) {
                   <div className="space-y-6 mt-8">
                     <div className="relative group">
                       <img
-                        src="./studio/Free.jpg"
+                        src="https://images.unsplash.com/photo-1443916568596-df5a58c445e9"
                         alt="Portrait Session"
                         className="rounded-3xl shadow-2xl w-full h-48 object-cover transform transition-transform duration-700 group-hover:scale-105"
                       />
