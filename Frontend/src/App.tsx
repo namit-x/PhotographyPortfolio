@@ -146,7 +146,7 @@ function App() {
                   }}
                   className="min-h-screen flex items-center justify-center"
                 >
-                  <Studio />
+                  <Studio onNavigateToPortfolio={() => setCurrentPage("contact")}/>
                 </motion.div>
               )}
 

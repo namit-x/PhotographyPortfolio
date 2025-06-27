@@ -89,7 +89,11 @@ const FloatingElement = ({ delay = 0 }) => (
   />
 )
 
-export default function Studio() {
+interface PhotoGridProps {
+  onNavigateToPortfolio?: () => void
+}
+
+export default function Studio({ onNavigateToPortfolio }: PhotoGridProps = {}) {
   return (
     <>
       {/* Custom Font Styles */}
@@ -458,6 +462,7 @@ export default function Studio() {
               whileHover={{ scale: 1.05, y: -4 }}
               whileTap={{ scale: 0.98 }}
               variants={fadeIn}
+              onClick={onNavigateToPortfolio}
             >
               <span className="relative z-10 uppercase tracking-wider">Get In Touch</span>
               <motion.div className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

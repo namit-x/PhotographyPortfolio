@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence, useInView, type Variants } from 'framer-motion'
-import { Play, Pause, Volume2, VolumeX, Camera, Film } from 'lucide-react'
+import { Play, Pause, Camera, Film } from 'lucide-react'
 
 interface VideoItem {
   id: number
@@ -148,23 +148,6 @@ export default function VideoSection() {
           return newSet
         })
       }
-    }
-  }
-
-  const toggleVideoMute = (videoId: number, e: React.MouseEvent) => {
-    e.stopPropagation()
-    const video = document.getElementById(`video-${videoId}`) as HTMLVideoElement
-    if (video) {
-      video.muted = !video.muted
-      setMutedVideos(prev => {
-        const newSet = new Set(prev)
-        if (video.muted) {
-          newSet.add(videoId)
-        } else {
-          newSet.delete(videoId)
-        }
-        return newSet
-      })
     }
   }
 
@@ -347,19 +330,6 @@ export default function VideoSection() {
                         <Pause className="w-8 h-8 text-white" />
                       ) : (
                         <Play className="w-8 h-8 text-white ml-1" />
-                      )}
-                    </motion.button>
-
-                    <motion.button
-                      onClick={(e) => toggleVideoMute(video.id, e)}
-                      className="p-3 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-300"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      {mutedVideos.has(video.id) ? (
-                        <VolumeX className="w-6 h-6 text-white" />
-                      ) : (
-                        <Volume2 className="w-6 h-6 text-white" />
                       )}
                     </motion.button>
                   </div>

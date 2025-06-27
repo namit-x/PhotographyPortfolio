@@ -275,18 +275,6 @@ export default function Testimonials() {
             </motion.button>
           ))}
         </div>
-
-        {/* Auto-play Control */}
-        <div className="text-center mt-8">
-          <motion.button
-            onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-            className="text-gray-500 hover:text-pink-600 transition-colors text-sm"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {isAutoPlaying ? "Pause Auto-play" : "Resume Auto-play"}
-          </motion.button>
-        </div>
       </div>
     </div>
   )
