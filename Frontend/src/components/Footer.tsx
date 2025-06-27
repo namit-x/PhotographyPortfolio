@@ -143,7 +143,7 @@ export default function Footer() {
                   <h3 className="font-playfair text-3xl font-bold text-white mb-4">
                     <span className="gradient-text-footer">Chirag</span>
                     <br />
-                    <span className="font-space text-2xl font-light tracking-wider">STUDIO</span>
+                    <span className="font-space text-2xl font-light tracking-wider">Photography</span>
                   </h3>
                   <p className="font-inter text-gray-400 leading-relaxed mb-6">
                     Creating timeless memories through the art of photography. Every moment, every emotion, captured

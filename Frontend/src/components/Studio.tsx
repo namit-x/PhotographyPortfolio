@@ -207,7 +207,7 @@ export default function Studio() {
                 </span>
                 <br />
                 <span className="font-space text-white font-light tracking-[0.1em] text-5xl md:text-7xl lg:text-8xl">
-                  STUDIO
+                  Photography
                 </span>
               </motion.h1>
 

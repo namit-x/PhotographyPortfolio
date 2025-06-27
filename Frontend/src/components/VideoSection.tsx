@@ -68,8 +68,8 @@ const videoItems: VideoItem[] = [
   },
   {
     id: 6,
-    title: "Studio Sessions",
-    description: "Professional studio work with creative lighting",
+    title: "Photography Sessions",
+    description: "Professional Photography work with creative lighting",
     category: "Studio",
     src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     thumbnail: "https://images.pexels.com/photos/1181677/pexels-photo-1181677.jpeg?auto=compress&cs=tinysrgb&w=800",
