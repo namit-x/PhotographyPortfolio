@@ -114,7 +114,6 @@ export default function VideoSection() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [hoveredId, setHoveredId] = useState<number | null>(null)
   const [playingVideos, setPlayingVideos] = useState<Set<number>>(new Set())
-  const [mutedVideos, setMutedVideos] = useState<Set<number>>(new Set([1, 2, 3, 4, 5, 6]))
 
   const sectionRef = useRef(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
@@ -283,7 +282,7 @@ export default function VideoSection() {
                 <video
                   id={`video-${video.id}`}
                   className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
-                  muted={mutedVideos.has(video.id)}
+                  // muted={mutedVideos.has(video.id)}
                   loop
                   playsInline
                   poster={video.thumbnail}
