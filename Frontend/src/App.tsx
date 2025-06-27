@@ -112,7 +112,7 @@ function App() {
                     ease: [0.4, 0, 0.2, 1] as const,
                   }}
                 >
-                  <Hero />
+                  <Hero onNavigateToPortfolio={() => setCurrentPage("portfolio")}/>
                   <PhotoGrid onNavigateToPortfolio={() => setCurrentPage("portfolio")} />
                   <VideoSection />
                   <Testimonials />

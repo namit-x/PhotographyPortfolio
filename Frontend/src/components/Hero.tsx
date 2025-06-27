@@ -41,7 +41,11 @@ const mediaItems: MediaItem[] = [
   }
 ];
 
-export default function Hero() {
+interface PhotoGridProps {
+  onNavigateToPortfolio?: () => void
+}
+
+export default function Hero({ onNavigateToPortfolio }: PhotoGridProps = {}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
@@ -207,6 +211,7 @@ export default function Hero() {
               whileHover={{ scale: 1.03, y: -1 }}
               whileTap={{ scale: 0.97 }}
               className="bg-gradient-to-r from-pink-500 to-rose-600 text-white px-6 py-3 rounded-full text-base md:text-lg font-semibold shadow-lg hover:shadow-rose-500/30 transition-all duration-300 border border-white/20"
+              onClick={onNavigateToPortfolio}
             >
               Explore Our Work
             </motion.button>
