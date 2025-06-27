@@ -51,7 +51,7 @@ const fadeIn: Variants = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number], // Cubic bezier tuple
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
       delay: 0.2,
       staggerChildren: 0.1,
       when: "beforeChildren",
@@ -279,7 +279,7 @@ export default function Studio({ onNavigateToPortfolio }: PhotoGridProps = {}) {
                   <div className="space-y-6">
                     <div className="relative group">
                       <img
-                        src="/studio/Happy.jpg"
+                        src="./studio/Happy.jpg"
                         alt="Studio Work"
                         className="rounded-3xl shadow-2xl w-full h-64 object-cover transform transition-transform duration-700 group-hover:scale-105"
                       />
@@ -297,7 +297,7 @@ export default function Studio({ onNavigateToPortfolio }: PhotoGridProps = {}) {
                   <div className="space-y-6 mt-8">
                     <div className="relative group">
                       <img
-                        src="/studio/Free.jpg"
+                        src="./studio/Free.jpg"
                         alt="Portrait Session"
                         className="rounded-3xl shadow-2xl w-full h-48 object-cover transform transition-transform duration-700 group-hover:scale-105"
                       />
