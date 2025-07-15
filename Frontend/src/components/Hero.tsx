@@ -174,7 +174,7 @@ export default function Hero({ onNavigateToPortfolio }: PhotoGridProps = {}) {
             className="max-w-3xl px-6 py-8 backdrop-blur-sm bg-black/40 rounded-2xl border border-white/10 shadow-xl"
           >
             <h1 className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-rose-500 bg-clip-text py-2 text-transparent">
-              Meenakshi Studio
+              Chirag Photography
             </h1>
 
             <motion.p

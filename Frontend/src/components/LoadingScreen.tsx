@@ -181,7 +181,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                   animate={{ letterSpacing: "-0.03em", opacity: 1 }}
                   transition={{ duration: 3 }}
                 >
-                  Meenakshi
+                  Chirag
                 </motion.h1>
 
                 <motion.h2
@@ -190,7 +190,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 2, delay: 1 }}
                 >
-                  Studio
+                  Photography
                 </motion.h2>
               </motion.div>
             )}

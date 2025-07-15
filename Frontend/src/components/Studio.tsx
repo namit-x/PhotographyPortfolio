@@ -11,7 +11,7 @@ interface TeamMember {
 const teamMembers: TeamMember[] = [
   {
     id: 1,
-    name: "Sonu Sharma",
+    name: "Chirag Sharma",
     role: "Lead Photographer & Founder",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&q=80",
     specialty: "Wedding & Portrait Photography",
@@ -207,7 +207,7 @@ export default function Studio({ onNavigateToPortfolio }: PhotoGridProps = {}) {
                 variants={fadeIn}
               >
                 <span className="bg-gradient-to-r from-white via-pink-100 to-rose-200 bg-clip-text text-transparent italic px-4">
-                  Meenakshi
+                  Chirag
                 </span>
                 <br />
                 <span className="font-space text-white font-light tracking-[0.1em] text-5xl md:text-7xl lg:text-8xl">

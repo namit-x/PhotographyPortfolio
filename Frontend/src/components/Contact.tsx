@@ -361,7 +361,7 @@ export default function Contact() {
               {
                 icon: Mail,
                 title: "Email Us",
-                content: "studiortk@gmail.com",
+                content: "Chiragstudiortk@gmail.com",
                 color: "from-rose-500 to-orange-500",
               },
               {
@@ -676,19 +676,19 @@ export default function Contact() {
                       {
                         icon: Instagram,
                         name: "Instagram",
-                        handle: "@meenakshistudio",
+                        handle: "@Chiragstudio",
                         color: "from-pink-500 to-purple-500",
                       },
                       {
                         icon: Facebook,
                         name: "Facebook",
-                        handle: "meenakshiStudio",
+                        handle: "ChiragStudio",
                         color: "from-blue-500 to-purple-500",
                       },
                       {
                         icon: Twitter,
                         name: "Twitter",
-                        handle: "@meenakshistudio",
+                        handle: "@Chiragstudio",
                         color: "from-blue-400 to-blue-600",
                       },
                     ].map((social, index) => (
