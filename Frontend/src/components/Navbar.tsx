@@ -84,7 +84,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
         setTimeout(() => {
           try {
             element.removeChild(particle)
-          } catch { }
+          } catch {}
         }, t)
       }, 30)
     }
@@ -110,19 +110,16 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
     setActiveIndex(index)
     updateEffectPosition(liEl)
 
-    // Call the external click handler
     if (items[index].onClick) {
-      items[index].onClick!();
+      items[index].onClick!()
     }
 
-    // Call the external click handler
     if (onItemClick) {
-      onItemClick(index, items[index]);
+      onItemClick(index, items[index])
     }
 
-    // Only prevent default if we're handling navigation ourselves
     if (!items[index].href || items[index].onClick) {
-      e.preventDefault();
+      e.preventDefault()
     }
 
     if (filterRef.current) {
@@ -150,62 +147,53 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
   }
 
   useEffect(() => {
-    if (!navRef.current || !containerRef.current || !filterRef.current || !textRef.current) return;
+    if (!navRef.current || !containerRef.current || !filterRef.current || !textRef.current) return
 
-    const activeLi = navRef.current.querySelectorAll("li")[activeIndex] as HTMLElement;
-    if (!activeLi) return;
+    const activeLi = navRef.current.querySelectorAll("li")[activeIndex] as HTMLElement
+    if (!activeLi) return
 
-    // Ensure active class is properly set
     navRef.current.querySelectorAll("li").forEach((li, idx) => {
-      li.classList.toggle("active", idx === activeIndex);
-    });
+      li.classList.toggle("active", idx === activeIndex)
+    })
 
-    // Update positions and effects
-    updateEffectPosition(activeLi);
-    textRef.current.classList.add("active");
+    updateEffectPosition(activeLi)
+    textRef.current.classList.add("active")
 
-    // Clean up any existing particles before creating new ones
-    const particles = filterRef.current.querySelectorAll(".particle");
-    particles.forEach((p) => p.remove());
+    const particles = filterRef.current.querySelectorAll(".particle")
+    particles.forEach((p) => p.remove())
 
-    // Create new particles
-    makeParticles(filterRef.current);
+    makeParticles(filterRef.current)
 
-    // Handle responsive positioning
     const resizeObserver = new ResizeObserver((entries) => {
-      if (!entries[0]) return;
-      const currentActiveLi = navRef.current?.querySelectorAll("li")[activeIndex] as HTMLElement;
+      if (!entries[0]) return
+      const currentActiveLi = navRef.current?.querySelectorAll("li")[activeIndex] as HTMLElement
       if (currentActiveLi) {
-        updateEffectPosition(currentActiveLi);
+        updateEffectPosition(currentActiveLi)
       }
-    });
+    })
 
-    resizeObserver.observe(containerRef.current);
+    resizeObserver.observe(containerRef.current)
 
     return () => {
-      resizeObserver.disconnect();
-      // Clean up any running animations
-      textRef.current?.classList.remove("active");
-    };
-  }, [activeIndex]);
-
-  // Add this effect to trigger gooey animation on initial render
-  useEffect(() => {
-    if (!navRef.current || !filterRef.current) return;
-    const activeLi = navRef.current.querySelectorAll("li")[activeIndex] as HTMLElement;
-    if (activeLi) {
-      updateEffectPosition(activeLi);
-      // Clean up any existing particles
-      const particles = filterRef.current.querySelectorAll(".particle");
-      particles.forEach((p) => filterRef.current!.removeChild(p));
-      makeParticles(filterRef.current);
-      textRef.current?.classList.add("active");
+      resizeObserver.disconnect()
+      textRef.current?.classList.remove("active")
     }
-  }, []);
+  }, [activeIndex])
+
+  useEffect(() => {
+    if (!navRef.current || !filterRef.current) return
+    const activeLi = navRef.current.querySelectorAll("li")[activeIndex] as HTMLElement
+    if (activeLi) {
+      updateEffectPosition(activeLi)
+      const particles = filterRef.current.querySelectorAll(".particle")
+      particles.forEach((p) => filterRef.current!.removeChild(p))
+      makeParticles(filterRef.current)
+      textRef.current?.classList.add("active")
+    }
+  }, [])
 
   return (
     <>
-      {/* Enhanced styles for better theming */}
       <style>
         {`
           :root {
@@ -220,9 +208,16 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 50px;
-            padding: 8px 16px;
+            padding: 6px 12px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
           }
+          
+          @media (min-width: 640px) {
+            .gooey-nav-container {
+              padding: 8px 16px;
+            }
+          }
+          
           .effect {
             position: absolute;
             opacity: 1;
@@ -235,7 +230,15 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             color: white;
             transition: color 0.3s ease;
             font-weight: 500;
+            font-size: 0.875rem;
           }
+          
+          @media (min-width: 640px) {
+            .effect.text {
+              font-size: 1rem;
+            }
+          }
+          
           .effect.text.active {
             color: black;
           }
@@ -248,7 +251,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             position: absolute;
             inset: -75px;
             z-index: -2;
-            background: transparent; /* Changed from black to transparent */
+            background: transparent;
           }
           .effect.filter::after {
             content: "";
@@ -358,13 +361,31 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
           li:hover {
             color: rgba(255, 255, 255, 0.9);
           }
+          
+          .nav-item {
+            padding: 8px 12px;
+            font-size: 0.875rem;
+          }
+          
+          @media (min-width: 640px) {
+            .nav-item {
+              padding: 12px 20px;
+              font-size: 1rem;
+            }
+          }
+          
+          @media (min-width: 768px) {
+            .nav-item {
+              padding: 12px 24px;
+            }
+          }
         `}
       </style>
       <div className="gooey-nav-container" ref={containerRef}>
         <nav className="flex relative" style={{ transform: "translate3d(0,0,0.01px)" }}>
           <ul
             ref={navRef}
-            className="flex gap-6 list-none p-0 px-2 m-0 relative z-[3] cursor-hover"
+            className="flex gap-2 sm:gap-4 md:gap-6 list-none p-0 px-1 sm:px-2 m-0 relative z-[3] cursor-hover"
             style={{
               color: "white",
               textShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
@@ -373,18 +394,19 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                className={`py-3 px-5 rounded-full relative cursor-pointer transition-all duration-300 ease font-medium text-sm tracking-wide cursor-hover ${activeIndex === index ? "active" : ""
-                  }`}
+                className={`nav-item rounded-full relative cursor-pointer transition-all duration-300 ease font-medium tracking-wide cursor-hover ${
+                  activeIndex === index ? "active" : ""
+                }`}
                 onClick={(e) => handleClick(e, index)}
               >
                 <a
                   href={item.href}
                   onKeyDown={(e) => handleKeyDown(e, index)}
-                  className="outline-none cursor-hover"
+                  className="outline-none cursor-hover block"
                   onClick={(e) => {
                     if (item.onClick) {
-                      e.preventDefault();
-                      item.onClick();
+                      e.preventDefault()
+                      item.onClick()
                     }
                   }}
                   tabIndex={0}
