@@ -141,9 +141,9 @@ export default function Footer() {
               <motion.div className="lg:col-span-1" variants={fadeIn}>
                 <div className="mb-8">
                   <h3 className="font-playfair text-3xl font-bold text-white mb-4">
-                    <span className="gradient-text-footer">Chirag</span>
+                    <span className="gradient-text-footer">Meenakshi</span>
                     <br />
-                    <span className="font-space text-2xl font-light tracking-wider">Photography</span>
+                    <span className="font-space text-2xl font-light tracking-wider">Studio</span>
                   </h3>
                   <p className="font-inter text-gray-400 leading-relaxed mb-6">
                     Creating timeless memories through the art of photography. Every moment, every emotion, captured
