@@ -370,22 +370,26 @@ export default function Contact() {
               transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {/* Google Maps */}
-              <div className="relative overflow-hidden rounded-3xl group">
-                <motion.div
-                  className="aspect-video bg-gray-900 relative"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.1710717407514!2d76.5996419!3d28.8932641!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d8507cd5e8197%3A0x83fcd360b761a34a!2sChirag%20Photography%20Rohtak!5e0!3m2!1sen!2sin!4v1752876289014!5m2!1sen!2sin"
-                    width="100%"
-                    height="450"
-                    allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-3xl" />
+              <div className="relative h-[300px] sm:h-[400px] lg:h-[500px]">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.1710717407514!2d76.5996419!3d28.8932641!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d8507cd5e8197%3A0x83fcd360b761a34a!2sChirag%20Photography%20Rohtak!5e0!3m2!1sen!2sin!4v1752879085187!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0 rounded-3xl"
+                />
 
-                  {/* Map Overlay Effect */}
-                  <motion.div className="absolute inset-0 border-2 border-pink-400/30 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </motion.div>
+                {/* Map Overlay - Responsive */}
+                <div className="absolute bottom-3 sm:bottom-4 lg:bottom-6 left-3 sm:left-4 lg:left-6 bg-card/95 backdrop-blur-sm rounded-lg p-3 sm:p-4 shadow-2xl border border-border/20 flex items-center gap-2 sm:gap-3 animate-float max-w-[calc(100%-1.5rem)] sm:max-w-[calc(100%-2rem)] lg:max-w-none">
+                  <div className="w-2 h-2 sm:w-3 sm:h-3 bg-primary-accent rounded-full animate-pulse flex-shrink-0"></div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-foreground text-sm sm:text-base truncate">Chirag Photography</p>
+                    <p className="text-muted-foreground text-xs sm:text-sm">Photography Studio</p>
+                  </div>
+                </div>
               </div>
 
               {/* Social Media */}

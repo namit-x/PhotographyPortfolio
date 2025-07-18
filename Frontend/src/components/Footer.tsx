@@ -191,11 +191,21 @@ export default function Footer() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <Phone className="w-4 h-4 text-pink-400 flex-shrink-0" />
-                    <span className="font-inter text-gray-400 text-sm">+91 94182 31111 </span>
+                    <a
+                    href="tel:+919418231111"
+                    className="text-gray-400 hover:text-rose-400 transition-colors text-sm sm:text-base"
+                  >
+                    +91 94182 31111
+                  </a>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Mail className="w-4 h-4 text-pink-400 flex-shrink-0" />
-                    <span className="font-inter text-gray-400 text-sm">chiragrohtak01@gmail.com</span>
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-pink-400 flex-shrink-0" />
+                  <a
+                    href="mailto:chiragrohtak01@gmail.com"
+                    className="text-gray-400 hover:text-pink-400 transition-colors text-sm sm:text-base break-all"
+                  >
+                    chiragrohtak01@gmail.com
+                  </a>
                   </div>
                 </div>
               </motion.div>
