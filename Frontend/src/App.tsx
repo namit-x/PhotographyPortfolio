@@ -90,12 +90,6 @@ function App() {
                 items={navItems}
                 initialActiveIndex={getActiveIndex()}
                 onItemClick={handleNavClick}
-                animationTime={500}
-                particleCount={12}
-                particleDistances={[80, 15]}
-                particleR={90}
-                timeVariance={250}
-                colors={[1, 2, 3, 4]}
               />
             </div>
 
@@ -112,7 +106,7 @@ function App() {
                     ease: [0.4, 0, 0.2, 1] as const,
                   }}
                 >
-                  <Hero onNavigateToPortfolio={() => setCurrentPage("portfolio")}/>
+                  <Hero onNavigateToPortfolio={() => setCurrentPage("portfolio")} />
                   <PhotoGrid onNavigateToPortfolio={() => setCurrentPage("portfolio")} />
                   <VideoSection />
                   <Testimonials />
@@ -146,7 +140,7 @@ function App() {
                   }}
                   className="min-h-screen flex items-center justify-center"
                 >
-                  <Studio onNavigateToPortfolio={() => setCurrentPage("contact")}/>
+                  <Studio onNavigateToPortfolio={() => setCurrentPage("contact")} />
                 </motion.div>
               )}
 

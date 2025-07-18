@@ -1,19 +1,10 @@
 import { motion, type Variants } from "framer-motion"
-import { Instagram, Facebook, Twitter, Mail, Phone, MapPin} from "lucide-react"
+import { Instagram, Facebook, Mail, Phone, MapPin} from "lucide-react"
 
 const socialLinks = [
-  { icon: Instagram, href: "#", label: "Instagram", color: "hover:text-pink-400" },
-  { icon: Facebook, href: "#", label: "Facebook", color: "hover:text-blue-400" },
-  { icon: Twitter, href: "#", label: "Twitter", color: "hover:text-sky-400" },
+  { icon: Instagram, href: "https://www.instagram.com/chiragphotographyrohtak/", label: "Instagram", color: "hover:text-pink-400" },
+  { icon: Facebook, href: "https://www.facebook.com/share/16x3YXzLXe/?mibextid=qi2Omg", label: "Facebook", color: "hover:text-blue-400" },
 ]
-
-const quickLinks = [
-  { name: "Portfolio", href: "#portfolio" },
-  { name: "About Studio", href: "#studio" },
-  { name: "Services", href: "#services" },
-  { name: "Contact", href: "#contact" },
-]
-
 const services = [
   { name: "Wedding Photography", href: "#" },
   { name: "Portrait Sessions", href: "#" },
@@ -136,7 +127,7 @@ export default function Footer() {
           variants={staggerChildren}
         >
           <div className="max-w-7xl mx-auto px-4 py-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-12">
               {/* Studio Info */}
               <motion.div className="lg:col-span-1" variants={fadeIn}>
                 <div className="mb-8">
@@ -154,6 +145,7 @@ export default function Footer() {
                   <div className="flex space-x-4">
                     {socialLinks.map((social, index) => (
                       <motion.a
+                      target="_blank"
                         key={index}
                         href={social.href}
                         className={`p-3 bg-gray-900/50 rounded-full border border-gray-800 hover:border-pink-500/50 transition-all duration-300 ${social.color} floating-icon`}
@@ -169,25 +161,6 @@ export default function Footer() {
                 </div>
               </motion.div>
 
-              {/* Quick Links */}
-              <motion.div variants={fadeIn}>
-                <h4 className="font-space text-lg font-semibold text-white mb-6 uppercase tracking-wider">
-                  Quick Links
-                </h4>
-                <ul className="space-y-3">
-                  {quickLinks.map((link, index) => (
-                    <li key={index}>
-                      <a
-                        href={link.href}
-                        className="font-inter text-gray-400 hover:text-pink-300 transition-colors duration-300 footer-link"
-                      >
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
               {/* Services */}
               <motion.div variants={fadeIn}>
                 <h4 className="font-space text-lg font-semibold text-white mb-6 uppercase tracking-wider">Services</h4>
@@ -195,7 +168,6 @@ export default function Footer() {
                   {services.map((service, index) => (
                     <li key={index}>
                       <a
-                        href={service.href}
                         className="font-inter text-gray-400 hover:text-pink-300 transition-colors duration-300 footer-link"
                       >
                         {service.name}

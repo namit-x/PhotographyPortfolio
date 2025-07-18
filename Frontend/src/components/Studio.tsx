@@ -1,44 +1,5 @@
 import { motion } from "framer-motion"
-
-interface TeamMember {
-  id: number
-  name: string
-  role: string
-  image: string
-  specialty?: string
-}
-
-const teamMembers: TeamMember[] = [
-  {
-    id: 1,
-    name: "Chirag Sharma",
-    role: "Lead Photographer & Founder",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&q=80",
-    specialty: "Wedding & Portrait Photography",
-  },
-  {
-    id: 2,
-    name: "Priya Mehta",
-    role: "Creative Director",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80",
-    specialty: "Fashion & Commercial Photography",
-  },
-  {
-    id: 3,
-    name: "Arjun Singh",
-    role: "Senior Photographer",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80",
-    specialty: "Event & Celebration Photography",
-  },
-]
-
-const stats = [
-  { number: "8+", label: "Years of Experience" },
-  { number: "500+", label: "Celebrations Captured" },
-  { number: "100%", label: "Client Satisfaction" },
-  { number: "50+", label: "Awards Won" },
-]
-
+import { teamMembers, stats } from "../data/Studio"
 import type { Variants } from 'framer-motion';
 
 const fadeIn: Variants = {
@@ -331,7 +292,7 @@ export default function Studio({ onNavigateToPortfolio }: PhotoGridProps = {}) {
             viewport={{ once: true }}
             variants={staggerChildren}
           >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
               {stats.map((stat, index) => (
                 <motion.div key={index} className="text-center group" variants={fadeIn} whileHover={{ scale: 1.05 }}>
                   <span className="font-playfair block text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-pink-400 via-rose-400 to-pink-500 bg-clip-text text-transparent mb-3 group-hover:scale-110 transition-transform duration-300">

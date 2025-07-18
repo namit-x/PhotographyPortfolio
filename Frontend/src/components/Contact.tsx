@@ -1,42 +1,18 @@
-import type React from "react"
-import { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence, useInView } from "framer-motion"
+import { useState, useRef } from "react"
+import { motion, useInView } from "framer-motion"
 import {
   MapPin,
   Phone,
   Mail,
   Clock,
-  Send,
   Instagram,
   Facebook,
-  Twitter,
   Camera,
   Heart,
   Sparkles,
   Star,
 } from "lucide-react"
 
-interface ContactFormData {
-  name: string
-  email: string
-  phone: string
-  eventType: string
-  eventDate: string
-  message: string
-}
-
-const eventTypes = [
-  "Wedding Photography",
-  "Portrait Session",
-  "Fashion Shoot",
-  "Commercial Project",
-  "Event Coverage",
-  "Maternity Shoot",
-  "Family Portrait",
-  "Other",
-]
-
-// Define the size types
 type ParticleSize = "small" | "medium" | "large"
 
 interface CinematicParticleProps {
@@ -45,7 +21,6 @@ interface CinematicParticleProps {
   size?: ParticleSize
 }
 
-// Cinematic floating particles
 const CinematicParticle = ({
   delay = 0,
   duration = 8,
@@ -106,55 +81,9 @@ const ConstellationDot = ({ x, y, delay = 0 }: ConstellationDotProps) => (
 )
 
 export default function Contact() {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: "",
-    email: "",
-    phone: "",
-    eventType: "",
-    eventDate: "",
-    message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showSuccess, setShowSuccess] = useState(false)
   const [activeSection, setActiveSection] = useState(0)
-
   const heroRef = useRef(null)
-  const formRef = useRef(null)
   const isHeroInView = useInView(heroRef, { once: true })
-  const isFormInView = useInView(formRef, { once: true, margin: "-100px" })
-
-  useEffect(() => { }, [])
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    setIsSubmitting(false)
-    setShowSuccess(true)
-
-    // Reset form after success
-    setTimeout(() => {
-      setShowSuccess(false)
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        eventType: "",
-        eventDate: "",
-        message: "",
-      })
-    }, 3000)
-  }
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -349,25 +278,25 @@ export default function Contact() {
               {
                 icon: MapPin,
                 title: "Visit Our Studio",
-                content: "Near Ashoka Plaza\nCircular Road, Rohtak\nHaryana 124001",
+                content: "Opp axis bank ashoka Chowk Rohtak",
                 color: "from-pink-500 to-rose-500",
               },
               {
                 icon: Phone,
                 title: "Call Us",
-                content: "+91 90052 34215\n+91 92921 23738\nWhatsApp Available",
+                content: "+91 94182 31111 \n+91 95183 31111\nWhatsApp Available",
                 color: "from-purple-500 to-pink-500",
               },
               {
                 icon: Mail,
                 title: "Email Us",
-                content: "Chiragstudiortk@gmail.com",
+                content: "chiragrohtak01@gmail.com",
                 color: "from-rose-500 to-orange-500",
               },
               {
                 icon: Clock,
                 title: "Studio Hours",
-                content: "Mon - Sat: 9:00 AM-8:00 PM\nSun: 10:00 AM - 6:00 PM\nBy Appointment Only",
+                content: "Mon - Sat: 10:00 AM-9:00 PM\nSun: 11:00 AM - 7:00 PM\nBy Appointment Only",
                 color: "from-pink-500 to-purple-500",
               },
             ].map((item, index) => (
@@ -430,185 +359,15 @@ export default function Contact() {
             ))}
           </motion.div>
 
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            {/* Contact Form */}
-            <motion.div
-              ref={formRef}
-              className="relative"
-              initial={{ opacity: 0, x: -50 }}
-              animate={isFormInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-            >
-              <div className="relative p-8 bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden">
-                {/* Animated Background */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-purple-500/5 rounded-3xl"
-                  animate={{
-                    background: [
-                      "linear-gradient(135deg, rgba(236, 72, 153, 0.05), rgba(147, 51, 234, 0.05))",
-                      "linear-gradient(135deg, rgba(244, 63, 94, 0.05), rgba(236, 72, 153, 0.05))",
-                      "linear-gradient(135deg, rgba(236, 72, 153, 0.05), rgba(147, 51, 234, 0.05))",
-                    ],
-                  }}
-                  transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
-                />
-
-                <div className="relative z-10">
-                  <div className="flex items-center gap-3 mb-8">
-                    <motion.div
-                      animate={{
-                        rotate: [0, 360],
-                      }}
-                      transition={{
-                        duration: 8,
-                        repeat: Number.POSITIVE_INFINITY,
-                        ease: "linear",
-                      }}
-                    >
-                      <Heart className="w-6 h-6 text-pink-400" />
-                    </motion.div>
-                    <h2 className="text-3xl font-bold text-white">Start Your Journey</h2>
-                  </div>
-
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <motion.div
-                        className="relative cursor-hover"
-                        whileFocus={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300"
-                          placeholder="Your Name"
-                        />
-                        <motion.div
-                          className="absolute inset-0 border border-pink-400/50 rounded-xl opacity-0 pointer-events-none"
-                          whileFocus={{ opacity: 1 }}
-                          transition={{ duration: 0.2 }}
-                        />
-                      </motion.div>
-
-                      <motion.div
-                        className="relative cursor-hover"
-                        whileFocus={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300"
-                          placeholder="Email Address"
-                        />
-                      </motion.div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="relative">
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 cursor-hover"
-                          placeholder="Phone Number"
-                        />
-                      </div>
-
-                      <div className="relative">
-                        <select
-                          name="eventType"
-                          value={formData.eventType}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 cursor-hover"
-                        >
-                          <option value="" className="bg-gray-900">
-                            Select Event Type
-                          </option>
-                          {eventTypes.map((type) => (
-                            <option key={type} value={type} className="bg-gray-900">
-                              {type}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="relative">
-                      <input
-                        type="date"
-                        name="eventDate"
-                        value={formData.eventDate}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 cursor-hover"
-                      />
-                    </div>
-
-                    <div className="relative">
-                      <textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        rows={5}
-                        required
-                        className="w-full px-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:bg-white/15 transition-all duration-300 resize-none cursor-hover"
-                        placeholder="Tell us about your vision, special requirements, or any questions you have..."
-                      />
-                    </div>
-
-                    <motion.button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-xl hover:from-pink-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 cursor-hover disabled:opacity-50 relative overflow-hidden"
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {/* Button Background Animation */}
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-pink-600 to-rose-600"
-                        initial={{ x: "-100%" }}
-                        whileHover={{ x: "0%" }}
-                        transition={{ duration: 0.3 }}
-                      />
-
-                      <div className="relative z-10 flex items-center justify-center gap-2">
-                        {isSubmitting ? (
-                          <>
-                            <motion.div
-                              className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-                              animate={{ rotate: 360 }}
-                              transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                            />
-                            Sending...
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-5 h-5" />
-                            Send Message
-                          </>
-                        )}
-                      </div>
-                    </motion.button>
-                  </form>
-                </div>
-              </div>
-            </motion.div>
-
+          {/* Main Content - Now just the Map and Social section centered */}
+          <div className="max-w-2xl mx-auto">
             {/* Map and Social */}
             <motion.div
               className="space-y-8"
-              initial={{ opacity: 0, x: 50 }}
-              animate={isFormInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {/* Google Maps */}
               <div className="relative overflow-hidden rounded-3xl group">
@@ -618,15 +377,10 @@ export default function Contact() {
                   transition={{ duration: 0.3 }}
                 >
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.123456789!2d76.6054321!3d28.8956789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d85000000000%3A0x123456789abcde!2sMeenakshi%20Studio%2C%20Rohtak!5e0!3m2!1sen!2sin!4v1234567890!5m2!1sen!2sin"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3493.1710717407514!2d76.5996419!3d28.8932641!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d8507cd5e8197%3A0x83fcd360b761a34a!2sChirag%20Photography%20Rohtak!5e0!3m2!1sen!2sin!4v1752876289014!5m2!1sen!2sin"
                     width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="rounded-3xl"
-                  />
+                    height="450"
+                    allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-3xl" />
 
                   {/* Map Overlay Effect */}
@@ -671,25 +425,21 @@ export default function Contact() {
                     stories.
                   </p>
 
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     {[
                       {
                         icon: Instagram,
                         name: "Instagram",
-                        handle: "@Chiragstudio",
+                        handle: "@chiragphotographyrohtak",
+                        link: "https://www.instagram.com/chiragphotographyrohtak",
                         color: "from-pink-500 to-purple-500",
                       },
                       {
                         icon: Facebook,
                         name: "Facebook",
-                        handle: "ChiragStudio",
+                        handle: "Chirag photography",
+                        link: "https://www.facebook.com/share/16x3YXzLXe/?mibextid=qi2Omg",
                         color: "from-blue-500 to-purple-500",
-                      },
-                      {
-                        icon: Twitter,
-                        name: "Twitter",
-                        handle: "@Chiragstudio",
-                        color: "from-blue-400 to-blue-600",
                       },
                     ].map((social, index) => (
                       <motion.a
@@ -726,62 +476,6 @@ export default function Contact() {
           </div>
         </div>
       </div>
-
-      {/* Success Message */}
-      <AnimatePresence>
-        {showSuccess && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="relative p-8 bg-gradient-to-br from-pink-500/20 to-purple-500/20 backdrop-blur-sm border border-pink-400/30 rounded-3xl text-center max-w-md overflow-hidden"
-              initial={{ scale: 0.8, opacity: 0, y: 50 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: 50 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-            >
-              {/* Success Animation Background */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-purple-500/10"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.5, 0.8, 0.5],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              />
-
-              <div className="relative z-10">
-                <motion.div
-                  className="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full flex items-center justify-center mx-auto mb-6"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    rotate: [0, 360],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "easeInOut",
-                  }}
-                >
-                  <Heart className="w-8 h-8 text-white" />
-                </motion.div>
-
-                <h3 className="text-2xl font-bold text-white mb-4">Message Sent!</h3>
-                <p className="text-gray-300 leading-relaxed">
-                  Thank you for reaching out! We'll get back to you within 24 hours to discuss your photography needs.
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   )
 }
