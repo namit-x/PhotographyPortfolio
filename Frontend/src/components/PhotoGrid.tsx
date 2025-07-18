@@ -1,6 +1,7 @@
 import { useRef, useState } from "react"
 import { motion, useInView } from "framer-motion"
-import { photoItems } from '../data/PhotoGrid';
+import { Instagram, Facebook } from "lucide-react"
+import { photoItems } from "../data/PhotoGrid"
 
 interface PhotoGridProps {
   onNavigateToPortfolio?: () => void
@@ -18,12 +19,10 @@ interface PhotoItem {
 // Organize photos into columns for better control
 const organizePhotosIntoColumns = () => {
   const columns: PhotoItem[][] = [[], [], [], []]
-
   photoItems.forEach((photo, index) => {
     const columnIndex = index % 4
     columns[columnIndex].push({ ...photo, originalIndex: index })
   })
-
   return columns
 }
 
@@ -102,7 +101,6 @@ const PhotoCard = ({ item, index }: { item: (typeof photoItems)[0]; index: numbe
           transition: { duration: 0.6, ease: "easeOut" },
         }}
       />
-
       <motion.div
         className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
         initial={{ opacity: 0.4 }}
@@ -111,7 +109,6 @@ const PhotoCard = ({ item, index }: { item: (typeof photoItems)[0]; index: numbe
           transition: { duration: 0.3 },
         }}
       />
-
       <motion.div
         className="absolute bottom-4 left-4 right-4"
         initial={{ opacity: 0, y: 20 }}
@@ -123,7 +120,6 @@ const PhotoCard = ({ item, index }: { item: (typeof photoItems)[0]; index: numbe
       >
         <h3 className="font-playfair text-white font-bold text-lg mb-1 drop-shadow-lg">{item.text}</h3>
       </motion.div>
-
       <motion.div
         className="absolute inset-0 border-2 border-pink-400/50 rounded-3xl"
         initial={{ opacity: 0 }}
@@ -132,7 +128,6 @@ const PhotoCard = ({ item, index }: { item: (typeof photoItems)[0]; index: numbe
           transition: { duration: 0.3 },
         }}
       />
-
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-pink-200/10 to-rose-200/10 rounded-3xl"
         initial={{ opacity: 0 }}
@@ -165,6 +160,43 @@ const FloatingElement = ({ delay = 0 }) => (
       ease: "easeOut",
     }}
   />
+)
+
+const SocialButton = ({
+  href,
+  icon: Icon,
+  label,
+  delay = 0,
+}: {
+  href: string
+  icon: any
+  label: string
+  delay?: number
+}) => (
+  <motion.a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group relative flex items-center justify-center w-full px-4 py-3 bg-white border-2 border-pink-200 text-gray-800 rounded-2xl font-space font-medium text-sm tracking-wide shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, delay: 1.9 + delay },
+    }}
+    whileHover={{
+      scale: 1.03,
+      boxShadow: "0 15px 30px rgba(219,39,119,0.12)",
+    }}
+    whileTap={{ scale: 0.97 }}
+  >
+    <Icon className="w-4 h-4 mr-2 text-pink-500" />
+    <span className="relative z-10 uppercase tracking-wider">{label}</span>
+    <motion.div
+      className="absolute inset-0 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl opacity-0 group-hover:opacity-8"
+      transition={{ duration: 0.3 }}
+    />
+  </motion.a>
 )
 
 export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}) {
@@ -235,12 +267,8 @@ export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}
                   : {}
               }
             >
-              Captured{" "}
-              <span className="photogrid-title font-medium">
-                Memories
-              </span>
+              Captured <span className="photogrid-title font-medium">Memories</span>
             </motion.h2>
-
             <motion.p
               className="font-inter text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
@@ -253,10 +281,9 @@ export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}
                   : {}
               }
             >
-              Every celebration tells a story. From intimate moments to grand celebrations, we capture the essence of your
-              most precious memories with <em className="font-cormorant text-pink-600">artistic vision</em>.
+              Every celebration tells a story. From intimate moments to grand celebrations, we capture the essence of
+              your most precious memories with <em className="font-cormorant text-pink-600">artistic vision</em>.
             </motion.p>
-
             <motion.div
               className="w-24 h-[1px] bg-gradient-to-r from-transparent via-pink-400 to-transparent mx-auto mt-8"
               initial={{ scaleX: 0 }}
@@ -322,6 +349,39 @@ export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}
                     transition={{ duration: 0.3 }}
                   />
                 </motion.button>
+              </motion.div>
+
+              {/* Social Media Buttons */}
+              <motion.div
+                className="space-y-3 mb-6"
+                initial={{ opacity: 0 }}
+                animate={
+                  isInView
+                    ? {
+                        opacity: 1,
+                        transition: { duration: 0.8, delay: 1.8 },
+                      }
+                    : {}
+                }
+              >
+                <SocialButton
+                  href="https://www.instagram.com/chiragphotographyrohtak"
+                  icon={Instagram}
+                  label="Instagram Gallery"
+                  delay={0}
+                />
+                <SocialButton
+                  href="https://www.instagram.com/babyclicksby_chirag"
+                  icon={Instagram}
+                  label="Baby Shoot"
+                  delay={0.1}
+                />
+                <SocialButton
+                  href="https://facebook.com/your-photography-pagehttps://www.facebook.com/share/16x3YXzLXe/?mibextid=qi2Omg"
+                  icon={Facebook}
+                  label="Facebook Page"
+                  delay={0.2}
+                />
               </motion.div>
             </div>
 

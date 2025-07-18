@@ -187,15 +187,15 @@ export default function Footer() {
                 <div className="space-y-4 mb-8">
                   <div className="flex items-center space-x-3">
                     <MapPin className="w-4 h-4 text-pink-400 flex-shrink-0" />
-                    <span className="font-inter text-gray-400 text-sm">Rohtak, Haryana, India</span>
+                    <span className="font-inter text-gray-400 text-sm">Opp axis bank ashoka Chowk Rohtak, Haryana, India</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Phone className="w-4 h-4 text-pink-400 flex-shrink-0" />
-                    <span className="font-inter text-gray-400 text-sm">+91 98765 43210</span>
+                    <span className="font-inter text-gray-400 text-sm">+91 94182 31111 </span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Mail className="w-4 h-4 text-pink-400 flex-shrink-0" />
-                    <span className="font-inter text-gray-400 text-sm">hello@namitstudio.com</span>
+                    <span className="font-inter text-gray-400 text-sm">chiragrohtak01@gmail.com</span>
                   </div>
                 </div>
               </motion.div>
