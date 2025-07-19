@@ -6,10 +6,11 @@ const socialLinks = [
   { icon: Facebook, href: "https://www.facebook.com/share/16x3YXzLXe/?mibextid=qi2Omg", label: "Facebook", color: "hover:text-blue-400" },
 ]
 const services = [
-  { name: "Wedding Photography", href: "#" },
-  { name: "Portrait Sessions", href: "#" },
-  { name: "Event Coverage", href: "#" },
-  { name: "Commercial Work", href: "#" },
+  { name: "Wedding Photography"},
+  { name: "Baby Shoots"},
+  { name: "Event Coverage"},
+  { name: "Commercial Work" },
+  { name: "Indoor Shoots"},
 ]
 
 const fadeIn: Variants = {
