@@ -209,7 +209,7 @@ const VideoModal = ({
             }}
             onClick={togglePlay}
           >
-            <source src={video.src} type="video/mp4" />
+            <source src={video.src} type="video/webm" />
           </video>
 
           {/* Controls Overlay */}
