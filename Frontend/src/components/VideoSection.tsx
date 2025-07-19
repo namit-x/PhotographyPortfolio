@@ -27,7 +27,7 @@ const reelsData: Omit<VideoItem, 'thumbnail'>[] = [
     title: "Wedding Highlights",
     description: "Beautiful moments captured in a stunning wedding ceremony",
     category: "Wedding",
-    src: "/Homepage/Demo2.mp4"
+    src: "/Demo2.webm"
   },
   {
     id: 2,
