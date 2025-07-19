@@ -59,7 +59,7 @@ const videosData: VideoItem[] = [
     title: "Wedding Highlights",
     description: "Cinematic wedding stories that capture the essence of love",
     category: "Weddings",
-    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    src: "/Homepage/Demo.webm",
     thumbnail: "https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
   {
@@ -362,11 +362,6 @@ const ReelSlider = ({ onVideoClick }: { onVideoClick: (video: Omit<VideoItem, 't
       {/* Category Badge */}
       <div className="absolute top-6 left-6 bg-gradient-to-r from-purple-500/80 to-pink-500/80 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-medium uppercase tracking-wider">
         {currentReel.category}
-      </div>
-
-      {/* Click to expand hint */}
-      <div className="absolute top-6 right-6 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        Click to expand
       </div>
     </div>
   )
