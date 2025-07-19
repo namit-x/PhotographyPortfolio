@@ -377,7 +377,7 @@ export default function PhotoGrid({ onNavigateToPortfolio }: PhotoGridProps = {}
                   delay={0.1}
                 />
                 <SocialButton
-                  href="https://facebook.com/your-photography-pagehttps://www.facebook.com/share/16x3YXzLXe/?mibextid=qi2Omg"
+                  href="https://www.facebook.com/share/16x3YXzLXe/?mibextid=qi2Omg"
                   icon={Facebook}
                   label="Facebook Page"
                   delay={0.2}

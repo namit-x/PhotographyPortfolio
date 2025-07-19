@@ -1,7 +1,15 @@
-import { useState, useRef } from 'react'
-import { motion, AnimatePresence, useInView, type Variants } from 'framer-motion'
-import { Play, Pause, Camera, Film } from 'lucide-react'
-import { videoItems } from '../data/Videos'
+import type React from "react"
+
+import { useState, useRef, useEffect } from "react"
+import { motion, AnimatePresence, useInView } from "framer-motion"
+import { Play, Pause, Volume2, VolumeX, ChevronLeft, ChevronRight, Monitor, X } from "lucide-react"
+import { Dialog, DialogContent } from "../components/ui/dialog"
+
+declare global {
+  namespace NodeJS {
+    interface Timeout { }
+  }
+}
 
 interface VideoItem {
   id: number
@@ -9,128 +17,446 @@ interface VideoItem {
   description: string
   category: string
   src: string
-  thumbnail: string
-  duration: string
+  thumbnail?: string
 }
 
-type ParticleSize = 'small' | 'medium' | 'large'
+// Reels data from public folder
+const reelsData: Omit<VideoItem, 'thumbnail'>[] = [
+  {
+    id: 1,
+    title: "Wedding Highlights",
+    description: "Beautiful moments captured in a stunning wedding ceremony",
+    category: "Wedding",
+    src: "/Homepage/Demo2.webm"
+  },
+  {
+    id: 2,
+    title: "Engagement Story",
+    description: "A romantic engagement session in the golden hour",
+    category: "Engagement",
+    src: "/Homepage/Demo.webm"
+  },
+  {
+    id: 3,
+    title: "Reception Dance",
+    description: "Joyful celebration moments from the reception",
+    category: "Reception",
+    src: "/videos/reel3.mp4"
+  },
+  {
+    id: 4,
+    title: "Bridal Prep",
+    description: "Getting ready moments with the bride",
+    category: "Bridal",
+    src: "/videos/reel4.mp4"
+  }
+]
 
-interface VideoParticleProps {
-  delay?: number
-  duration?: number
-  size?: ParticleSize
+// Videos data from public folder
+const videosData: VideoItem[] = [
+  {
+    id: 5,
+    title: "Wedding Highlights",
+    description: "Cinematic wedding stories that capture the essence of love",
+    category: "Weddings",
+    src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    thumbnail: "https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=800",
+  },
+  {
+    id: 6,
+    title: "Behind the Lens",
+    description: "Creative process and artistic vision in motion",
+    category: "Behind Scenes",
+    src: "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
+    thumbnail: "https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=800",
+  },
+]
+
+const VideoModal = ({
+  isOpen,
+  onClose,
+  video,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  video: VideoItem | null
+}) => {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
+  const [showControls, setShowControls] = useState(true)
+  const [aspectRatio, setAspectRatio] = useState(16 / 9)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const controlsTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (isOpen && video) {
+      setIsPlaying(false)
+      setShowControls(true)
+    }
+  }, [isOpen, video])
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!isOpen) return
+
+      switch (e.code) {
+        case "Space":
+          e.preventDefault()
+          togglePlay()
+          break
+        case "KeyM":
+          toggleMute()
+          break
+        case "Escape":
+          onClose()
+          break
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyPress)
+    return () => document.removeEventListener("keydown", handleKeyPress)
+  }, [isOpen, isPlaying, isMuted])
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause()
+      } else {
+        videoRef.current.play()
+      }
+      setIsPlaying(!isPlaying)
+    }
+  }
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted
+      setIsMuted(!isMuted)
+    }
+  }
+
+  const handleVideoLoadedMetadata = () => {
+    if (videoRef.current) {
+      const { videoWidth, videoHeight } = videoRef.current
+      setAspectRatio(videoWidth / videoHeight)
+    }
+  }
+
+  const showControlsTemporarily = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current !== null) {
+      window.clearTimeout(controlsTimeoutRef.current);
+    }
+    if (isPlaying) {
+      controlsTimeoutRef.current = window.setTimeout(() => {
+        setShowControls(false);
+      }, 3000);
+    }
+  };
+
+  const handleMouseMove = () => {
+    showControlsTemporarily()
+  }
+
+  const getVideoContainerStyle = () => {
+    const maxWidth = Math.min(window.innerWidth * 0.9, 1200)
+    const maxHeight = Math.min(window.innerHeight * 0.8, 800)
+
+    let width, height
+
+    if (aspectRatio > maxWidth / maxHeight) {
+      // Video is wider relative to container
+      width = maxWidth
+      height = maxWidth / aspectRatio
+    } else {
+      // Video is taller relative to container
+      height = maxHeight
+      width = maxHeight * aspectRatio
+    }
+
+    return {
+      width: `${width}px`,
+      height: `${height}px`,
+      maxWidth: "90vw",
+      maxHeight: "80vh",
+    }
+  }
+
+  if (!video) return null
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent
+        className="max-w-none w-auto h-auto p-0 bg-black border-0 overflow-hidden"
+        style={getVideoContainerStyle()}
+      >
+        <div
+          className="relative w-full h-full bg-black group"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={() => !isPlaying && setShowControls(true)}
+        >
+          {/* Video */}
+          <video
+            ref={videoRef}
+            className="w-full h-full object-contain"
+            poster={video.thumbnail}
+            onLoadedMetadata={handleVideoLoadedMetadata}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onEnded={() => {
+              setIsPlaying(false)
+              setShowControls(true)
+            }}
+            onClick={togglePlay}
+          >
+            <source src={video.src} type="video/mp4" />
+          </video>
+
+          {/* Controls Overlay */}
+          <AnimatePresence>
+            {showControls && (
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Close Button */}
+                <button
+                  onClick={onClose}
+                  className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-all duration-200 z-10"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+
+                {/* Play/Pause Button (Center) */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <motion.button
+                    onClick={togglePlay}
+                    className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-200"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
+                  </motion.button>
+                </div>
+
+                {/* Bottom Controls */}
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={togglePlay}
+                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-200"
+                      >
+                        {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
+                      </button>
+                      <button
+                        onClick={toggleMute}
+                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-200"
+                      >
+                        {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Video Info */}
+                  <div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="bg-gradient-to-r from-pink-500/80 to-rose-500/80 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-medium uppercase tracking-wider">
+                        {video.category}
+                      </div>
+                    </div>
+                    <h3 className="text-white font-semibold text-xl mb-1">{video.title}</h3>
+                    <p className="text-gray-300 text-sm">{video.description}</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
 }
 
-const VideoParticle = ({ delay = 0, duration = 12, size = "small" }: VideoParticleProps) => {
-  const sizeClasses: Record<ParticleSize, string> = {
-    small: "w-1 h-1",
-    medium: "w-2 h-2",
-    large: "w-3 h-3",
+const ReelSlider = ({ onVideoClick }: { onVideoClick: (video: Omit<VideoItem, 'thumbnail'>) => void }) => {
+  const [currentReelIndex, setCurrentReelIndex] = useState(0)
+  const [isMuted, setIsMuted] = useState(true)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const currentReel = reelsData[currentReelIndex]
+
+  const nextReel = () => {
+    setCurrentReelIndex((prev) => (prev + 1) % reelsData.length)
+  }
+
+  const prevReel = () => {
+    setCurrentReelIndex((prev) => (prev - 1 + reelsData.length) % reelsData.length)
+  }
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted)
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted
+    }
+  }
+
+  const handleVideoClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onVideoClick(currentReel)
+  }
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted
+      videoRef.current.play().catch(e => console.log("Autoplay prevented:", e))
+    }
+  }, [currentReelIndex, isMuted])
+
+  return (
+    <div className="relative h-full bg-gray-900 rounded-2xl overflow-hidden group w-[340px]">
+      {/* Video - Always autoplaying */}
+      <video
+        ref={videoRef}
+        key={currentReel.id}
+        className="w-full h-full object-cover cursor-pointer"
+        loop
+        autoPlay
+        muted={isMuted}
+        playsInline
+        onClick={handleVideoClick}
+      >
+        <source src={currentReel.src} type="video/mp4" />
+      </video>
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevReel}
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-all duration-200 opacity-0 group-hover:opacity-100 z-10"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        onClick={nextReel}
+        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/60 transition-all duration-200 opacity-0 group-hover:opacity-100 z-10"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+
+      {/* Mute Control Only (removed play/pause) */}
+      <div className="absolute bottom-6 left-6 right-6">
+        <div className="flex items-center justify-end mb-4">
+          <button
+            onClick={toggleMute}
+            className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-200"
+          >
+            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Category Badge */}
+      <div className="absolute top-6 left-6 bg-gradient-to-r from-purple-500/80 to-pink-500/80 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-medium uppercase tracking-wider">
+        {currentReel.category}
+      </div>
+
+      {/* Click to expand hint */}
+      <div className="absolute top-6 right-6 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        Click to expand
+      </div>
+    </div>
+  )
+}
+
+
+const VideoPlayer = ({
+  video,
+  index,
+  onVideoClick,
+}: {
+  video: VideoItem
+  index: number
+  onVideoClick: (video: VideoItem) => void
+}) => {
+  const handleClick = () => {
+    onVideoClick(video)
   }
 
   return (
     <motion.div
-      className={`absolute ${sizeClasses[size]} bg-gradient-to-r from-pink-400 to-rose-400 rounded-full`}
-      initial={{
-        x: Math.random() * (typeof window !== "undefined" ? window.innerWidth : 1000),
-        y: typeof window !== "undefined" ? window.innerHeight + 100 : 1000,
-        opacity: 0,
-        scale: 0,
-      }}
-      animate={{
-        y: -100,
-        opacity: [0, 0.6, 0.3, 0],
-        scale: [0, 1, 1.2, 0],
-        rotate: [0, 180, 360],
-      }}
-      transition={{
-        duration,
-        delay,
-        repeat: Infinity,
-        ease: "easeOut",
-      }}
-    />
+      className="relative bg-gray-900 rounded-2xl overflow-hidden group cursor-pointer"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.2 }}
+      onClick={handleClick}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      {/* Thumbnail */}
+      <div className="relative w-80 h-[40vh] overflow-hidden">
+        <img src={video.thumbnail || "/placeholder.svg"} alt={video.title} className="w-full h-full object-cover" />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+        {/* Play Button */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <motion.div
+            className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white group-hover:bg-white/30 transition-all duration-200"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <Play className="w-8 h-8 ml-1" />
+          </motion.div>
+        </div>
+
+        {/* Video Info */}
+        <div className="absolute bottom-0 left-0 right-0 p-6">
+          <div className="flex items-center justify-between mb-2">
+            <div className="bg-gradient-to-r from-pink-500/80 to-rose-500/80 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-medium uppercase tracking-wider">
+              {video.category}
+            </div>
+          </div>
+          <h3 className="text-white font-semibold text-xl mb-1">{video.title}</h3>
+          <p className="text-gray-300 text-sm">{video.description}</p>
+        </div>
+
+        {/* Click to play hint */}
+        <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          Click to play
+        </div>
+      </div>
+    </motion.div>
   )
 }
 
 export default function VideoSection() {
   const [selectedVideo, setSelectedVideo] = useState<VideoItem | null>(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [hoveredId, setHoveredId] = useState<number | null>(null)
-  const [playingVideos, setPlayingVideos] = useState<Set<number>>(new Set())
-
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const sectionRef = useRef(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
 
-  const handleVideoClick = (video: VideoItem, e: React.MouseEvent) => {
-    // Prevent opening dialog if clicking on video controls
-    if ((e.target as HTMLElement).closest('.video-controls')) {
-      return
-    }
+  const handleVideoClick = (video: VideoItem) => {
     setSelectedVideo(video)
-    setIsDialogOpen(true)
+    setIsModalOpen(true)
   }
 
-  const closeDialog = () => {
-    setIsDialogOpen(false)
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
     setSelectedVideo(null)
   }
 
-  const toggleVideoPlay = (videoId: number, e: React.MouseEvent) => {
-    e.stopPropagation()
-    const video = document.getElementById(`video-${videoId}`) as HTMLVideoElement
-    if (video) {
-      if (video.paused) {
-        video.play()
-        setPlayingVideos(prev => new Set([...prev, videoId]))
-      } else {
-        video.pause()
-        setPlayingVideos(prev => {
-          const newSet = new Set(prev)
-          newSet.delete(videoId)
-          return newSet
-        })
-      }
-    }
-  }
-
-  const fadeInUp: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.8,
-        ease: 'easeInOut',
-      },
-    }),
-  };
-
   return (
-    <div className="relative min-h-screen bg-black py-20 overflow-hidden">
-      {/* Cinematic Background Effects */}
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 py-20 overflow-hidden">
+      {/* Background Effects */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Floating Particles */}
-        {[...Array(12)].map((_, i) => (
-          <VideoParticle
-            key={i}
-            delay={i * 0.4}
-            duration={8 + Math.random() * 6}
-            size={Math.random() > 0.8 ? "medium" : "small"}
-          />
-        ))}
-
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black" />
-
-        {/* Film Grain */}
-        <div
-          className="absolute inset-0 opacity-[0.02] mix-blend-overlay"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          }}
-        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(236,72,153,0.1),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.1),transparent_50%)]" />
       </div>
 
       <div ref={sectionRef} className="relative z-10 max-w-7xl mx-auto px-4">
@@ -141,249 +467,100 @@ export default function VideoSection() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          {/* Animated Icon */}
           <motion.div
             className="mb-8"
             animate={{
-              rotate: [0, 5, -5, 0],
-              scale: [1, 1.1, 1],
+              rotate: [0, 2, -2, 0],
+              scale: [1, 1.05, 1],
             }}
             transition={{
-              duration: 6,
-              repeat: Infinity,
+              duration: 8,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "easeInOut",
             }}
           >
             <div className="relative inline-block">
-              <Film className="w-16 h-16 text-pink-400 mx-auto" />
+              <Monitor className="w-16 h-16 text-pink-400 mx-auto" />
               <motion.div
-                className="absolute -inset-4 border border-pink-400/30 rounded-full"
+                className="absolute -inset-4 border border-pink-400/20 rounded-2xl"
                 animate={{
-                  rotate: [0, 360],
-                  scale: [1, 1.2, 1],
+                  borderColor: ["rgba(236,72,153,0.2)", "rgba(168,85,247,0.3)", "rgba(236,72,153,0.2)"],
                 }}
                 transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "linear",
+                  duration: 4,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
                 }}
               />
             </div>
           </motion.div>
-
           <motion.span
             className="inline-block text-sm uppercase tracking-[0.3em] text-pink-300 font-light mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Visual Stories
+            Premium Experience
           </motion.span>
-
           <motion.h2
-            className="text-5xl md:text-7xl font-bold tracking-tight mb-6"
+            className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1, delay: 0.4 }}
           >
-            <span className="bg-gradient-to-r from-white via-pink-200 to-rose-300 bg-clip-text text-transparent">
-              Cinematic
+            <span className="bg-gradient-to-r from-white via-pink-200 to-purple-300 bg-clip-text text-transparent">
+              Digital
             </span>
-            <br />
-            <span className="text-white">Masterpieces</span>
+            <span className="text-white">Showcase</span>
           </motion.h2>
-
-          <motion.p
-            className="text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            Experience our work in motion. Each video tells a unique story, crafted with cinematic precision
-            and artistic vision to preserve your most precious moments.
-          </motion.p>
         </motion.div>
 
-        {/* Video Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {videoItems.map((video, i) => (
-            <motion.div
-              key={video.id}
-              className="relative group cursor-pointer"
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={fadeInUp}
-              whileHover={{ y: -8 }}
-              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-              onMouseEnter={() => setHoveredId(video.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              onClick={(e) => handleVideoClick(video, e)}
-            >
-              <div className="relative h-[320px] overflow-hidden rounded-2xl bg-gray-900">
-                {/* Video Element */}
-                <video
-                  id={`video-${video.id}`}
-                  className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
-                  // muted={mutedVideos.has(video.id)}
-                  loop
-                  playsInline
-                  poster={video.thumbnail}
-                  onLoadedData={() => {
-                    // Auto-play on hover for preview
-                    const videoEl = document.getElementById(`video-${video.id}`) as HTMLVideoElement
-                    if (videoEl && hoveredId === video.id) {
-                      videoEl.currentTime = 0
-                    }
-                  }}
-                >
-                  <source src={video.src} type="video/mp4" />
-                  {/* Fallback image */}
-                  <img
-                    src={video.thumbnail}
-                    alt={video.title}
-                    className="w-full h-full object-cover"
-                  />
-                </video>
-
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                {/* Duration Badge */}
-                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-white text-sm font-medium">
-                  {video.duration}
-                </div>
-
-                {/* Category Badge */}
-                <div className="absolute top-4 left-4 bg-gradient-to-r from-pink-500/80 to-rose-500/80 backdrop-blur-sm px-3 py-1 rounded-full text-white text-xs font-medium uppercase tracking-wider">
-                  {video.category}
-                </div>
-
-                {/* Video Controls */}
-                <div className="video-controls absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex items-center gap-4">
-                    <motion.button
-                      onClick={(e) => toggleVideoPlay(video.id, e)}
-                      className="p-4 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-all duration-300"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      {playingVideos.has(video.id) ? (
-                        <Pause className="w-8 h-8 text-white" />
-                      ) : (
-                        <Play className="w-8 h-8 text-white ml-1" />
-                      )}
-                    </motion.button>
-                  </div>
-                </div>
-
-                {/* Content Overlay */}
-                <div className="absolute inset-0 flex flex-col justify-end p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Camera className="w-4 h-4 text-pink-300" />
-                      <span className="text-pink-300 text-sm uppercase tracking-wider">{video.category}</span>
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-white mb-2">{video.title}</h3>
-                    <p className="text-gray-300 text-sm leading-relaxed">{video.description}</p>
-                  </div>
-                </div>
-
-                {/* Mobile-friendly overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent block md:hidden">
-                  <h3 className="text-xl font-bold text-white mb-1">{video.title}</h3>
-                  <span className="text-pink-300 text-sm uppercase tracking-wider">{video.category}</span>
-                </div>
-
-                {/* Hover ring effect */}
-                <motion.div
-                  className="absolute inset-0 border-2 border-pink-400/30 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  animate={hoveredId === video.id ? {
-                    borderColor: [
-                      "rgba(236, 72, 153, 0.3)",
-                      "rgba(244, 63, 94, 0.5)",
-                      "rgba(236, 72, 153, 0.3)",
-                    ],
-                  } : {}}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Call to Action */}
+        {/* Laptop Interface */}
         <motion.div
-          className="text-center mt-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="relative max-w-6xl mx-auto"
+          initial={{ opacity: 0, y: 50, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 1.2, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
+          {/* Screen Content */}
+          <div className="bg-gray-950 rounded-xl overflow-hidden min-h-[600px] lg:min-h-[700px]">
+            {/* Split Layout - Adjusted for fixed ReelSlider width */}
+            <div className="grid grid-cols-1 lg:grid-cols-[440px_1fr] h-full">
+              {/* Left Section - Reels (fixed width) */}
+              <div className="relative p-6 border-r border-gray-800 w-[420px]">
+                <div className="mb-4">
+                  <h3 className="text-white text-xl font-semibold mb-2">Instagram Reels</h3>
+                  <p className="text-gray-400 text-sm">Click to view in fullscreen</p>
+                </div>
+                <div className="h-[400px] lg:h-[600px] w-full">
+                  <ReelSlider onVideoClick={handleVideoClick} />
+                </div>
+              </div>
+
+              {/* Right Section - Feature Videos (flexible width) */}
+              <div className="relative p-6 flex-1">
+                <div className="mb-4">
+                  <h3 className="text-white text-xl font-semibold mb-2">Feature Films</h3>
+                  <p className="text-gray-400 text-sm">Click to play full cinematic experiences</p>
+                </div>
+                <div className="space-y-6 h-[500px] lg:h-[600px]">
+                  {videosData.map((video, index) => (
+                    <div key={video.id} className="h-[calc(50%-12px)]">
+                      <VideoPlayer video={video} index={index} onVideoClick={handleVideoClick} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Ambient Glow */}
+          <div className="absolute -inset-20 bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-pink-500/10 blur-3xl -z-10" />
         </motion.div>
       </div>
 
-      {/* Video Dialog */}
-      <AnimatePresence>
-        {selectedVideo && isDialogOpen && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeDialog}
-          >
-            <motion.div
-              className="relative max-w-5xl max-h-[90vh] bg-gray-900 rounded-2xl overflow-hidden"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={closeDialog}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors duration-200 flex items-center justify-center cursor-hover"
-              >
-                ×
-              </button>
-
-              <div className="aspect-video">
-                <video
-                  className="w-full h-full object-cover rounded-t-2xl"
-                  controls
-                  autoPlay
-                  muted={false}
-                  playsInline
-                >
-                  <source src={selectedVideo.src} type="video/mp4" />
-                  <img
-                    src={selectedVideo.thumbnail}
-                    alt={selectedVideo.title}
-                    className="w-full h-full object-cover"
-                  />
-                </video>
-              </div>
-
-              <div className="p-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-2 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg">
-                    <Camera className="w-4 h-4 text-white" />
-                  </div>
-                  <span className="text-pink-400 text-sm uppercase tracking-wider font-medium">
-                    {selectedVideo.category}
-                  </span>
-                </div>
-
-                <h3 className="text-3xl font-bold text-white mb-4">{selectedVideo.title}</h3>
-                <p className="text-gray-400 text-lg leading-relaxed">{selectedVideo.description}</p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Video Modal */}
+      <VideoModal isOpen={isModalOpen} onClose={handleCloseModal} video={selectedVideo} />
     </div>
   )
 }
