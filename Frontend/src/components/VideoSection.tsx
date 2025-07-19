@@ -336,7 +336,7 @@ const ReelSlider = ({ onVideoClick }: { onVideoClick: (video: Omit<VideoItem, "t
       <video
         ref={videoRef}
         key={currentReel.id}
-        className="w-full h-full object-cover cursor-pointer"
+        className="w-full h-full object-contain cursor-pointer"
         loop
         autoPlay
         muted={isMuted}
@@ -523,7 +523,6 @@ export default function VideoSection() {
               <div className="xl:w-[400px] xl:border-r border-gray-800/50 p-4 md:p-6">
                 <div className="mb-4 md:mb-6">
                   <h3 className="text-white text-lg md:text-xl font-semibold mb-2">Instagram Reels</h3>
-                  <p className="text-gray-400 text-sm">Tap to view in fullscreen</p>
                 </div>
                 <div className="h-[400px] md:h-[500px] xl:h-[600px]">
                   <ReelSlider onVideoClick={handleVideoClick} />
